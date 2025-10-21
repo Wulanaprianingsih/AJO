@@ -1,26 +1,129 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: "Inter", sans-serif;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+/* ========================BUTTON PRIMARY============================ */
+.ant-btn-primary {
+  background-color: #ff9d33 !important;
+  border-color: #ff9d33 !important;
+  color: #fff !important;
+  font-weight: bold;
+}
+
+.ant-btn-primary:hover {
+  background-color: #e68a1a !important;
+  border-color: #e68a1a !important;
+  color: #fff !important;
+}
+
+.ant-btn-primary:disabled,
+.ant-btn-primary.ant-btn-disabled {
+  background-color: #d3c5b5 !important;
+  border-color: #d9d9d9 !important;
+  color: #8c7d69 !important;
+  cursor: not-allowed !important;
+}
+
+.ant-btn-primary:disabled:hover,
+.ant-btn-primary.ant-btn-disabled:hover {
+  background-color: #d3c5b5 !important;
+  border-color: #d3c5b5 !important;
+  color: #8c7d69 !important;
+  cursor: not-allowed !important;
+}
+
+/* ================================INPUTS=============================== */
+.custom-input.ant-input {
+  border: 1px solid #5e331e !important;
+  border-radius: 0.5rem;
+  background-color: transparent !important;
+  color: #5e331e !important;
+  margin-top: 8px;
+}
+
+.custom-input.ant-input::placeholder,
+.custom-select .ant-select-selector .ant-select-selection-placeholder {
+  color: #5e331e80;
+  opacity: 1;
+}
+
+.custom-input.ant-input:focus {
+  border-color: #5e331e !important;
+  box-shadow: none !important;
+}
+
+/* ================================SELECT=============================== */
+
+.custom-select {
+  margin-top: 8px;
+}
+
+.custom-select .ant-select-selector {
+  border: 1px solid #5e331e !important;
+  border-radius: 0.5rem;
+  background-color: transparent !important;
+  color: #5e331e !important;
+}
+
+.ant-select-item-option:hover {
+  background-color: #5e331e !important;
+  color: #fff !important;
+}
+
+.ant-select-item-option-selected {
+  background-color: #5e331e !important;
+  color: #fff !important;
+}
+
+.ant-select-item-option-content {
+  color: #000 !important;
+}
+
+.ant-select-item-option:hover .ant-select-item-option-content,
+.ant-select-item-option-selected .ant-select-item-option-content {
+  color: #fff !important;
+}
+
+.ant-select-dropdown {
+  background-color: #fff5e6;
+  border-radius: 0.5rem;
+}
+
+/* =====================PASSWORD INPUT=============================== */
+.custom-password.ant-input-password {
+  border-radius: 0.5rem;
+  border: 1px solid #5e331e !important;
+  background-color: transparent !important;
+  margin-top: 16px;
+}
+
+.custom-password.ant-input-password .ant-input {
+  color: #5e331e !important;
+  background-color: transparent !important;
+}
+
+.custom-password.ant-input-password .ant-input::placeholder {
+  color: #5e331e80;
+  opacity: 1;
+}
+
+.custom-password.ant-input-password .ant-input:focus {
+  border-color: #5e331e !important;
+  box-shadow: none !important;
+}
+
+.custom-password.ant-input-password .ant-input-suffix {
+  color: #5e331e;
 }

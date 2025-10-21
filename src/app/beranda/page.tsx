@@ -1,5 +1,5 @@
 import BerandaContainer from "modules/beranda/containers/BerandaContainer";
 
-export default function Home() {
+export default function BerandaPage() {
   return <BerandaContainer />;
 }
