@@ -35,4 +35,21 @@ interface IUserData {
   level: number
 }
 
-export type { ICourse, IOptions, IQuestion, IAnswered, IUserData }
+export interface IDetailCourse {
+  id: number;
+  title: string;         
+  description: string;   
+  media_url?: string;    
+  media_type?: "image" | "video"; 
+  content_text: string;  
+  quiz?: IQuiz;         
+}
+
+export interface IQuiz {
+  question: string;       
+  options: string[];      
+  correctAnswer: string; 
+}
+
+
+export type { ICourse, IOptions, IQuestion, IAnswered, IUserData, IDetailCourse, IQuiz }

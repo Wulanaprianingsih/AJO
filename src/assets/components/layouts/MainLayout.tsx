@@ -27,12 +27,12 @@ export default function MainLayout({
   const [logoutModal, setLogoutModal] = useState(false);
 
   const menu = [
-    { name: "Beranda", path: "/beranda", icon: <HomeOutlined /> },
-    { name: "Materi", path: "/materi", icon: <ReadOutlined /> },
-    { name: "Latihan", path: "/latihan", icon: <EditOutlined /> },
-    { name: "Peringkat", path: "/peringkat", icon: <TrophyOutlined /> },
-    { name: "Profil", path: "/profil", icon: <UserOutlined /> },
-    { name: "Keluar", path: "/keluar", icon: <LogoutOutlined /> },
+    { name: "Beranda", path: "/dashboard", icon: <HomeOutlined /> },
+    { name: "Materi", path: "/material", icon: <ReadOutlined /> },
+    { name: "Latihan", path: "/exercises", icon: <EditOutlined /> },
+    { name: "Peringkat", path: "/leaderboard", icon: <TrophyOutlined /> },
+    { name: "Profil", path: "/profile", icon: <UserOutlined /> },
+    { name: "Keluar", path: "/logout", icon: <LogoutOutlined /> },
   ];
 
   const handleLogout = async () => {
