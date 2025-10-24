@@ -15,11 +15,17 @@ import badgeIcon from "assets/images/badge_aksara.png";
 
 interface IProps {
   role: string | undefined;
+  dashboardData:
+    | {
+        point: number;
+        badge: string;
+        level: number;
+      }
+    | undefined;
 }
 
 export default function DashboardUserComponent(props: IProps) {
-  const { role } = props;
-  console.log("role", role);
+  const { dashboardData } = props;
 
   return (
     <MainLayout>
@@ -85,7 +91,9 @@ export default function DashboardUserComponent(props: IProps) {
                     height={28}
                     className="mb-1"
                   />
-                  <h2 className="text-2xl font-bold text-green-800">2</h2>
+                  <h2 className="text-2xl font-bold text-green-800">
+                    {dashboardData?.level}
+                  </h2>
                   <p className="text-sm text-[#5E331E] font-medium">
                     Bocah Wicara
                   </p>
@@ -112,7 +120,9 @@ export default function DashboardUserComponent(props: IProps) {
                     height={28}
                     className="mb-1"
                   />
-                  <h2 className="text-2xl font-bold text-yellow-700">180</h2>
+                  <h2 className="text-2xl font-bold text-yellow-700">
+                    {dashboardData?.point}
+                  </h2>
                   <p className="text-sm text-[#5E331E] font-medium">
                     Total Poin
                   </p>
@@ -139,7 +149,7 @@ export default function DashboardUserComponent(props: IProps) {
                     className="mb-1"
                   />
                   <h2 className="text-base font-semibold text-orange-700">
-                    Aksara Sakti
+                    {dashboardData?.badge}
                   </h2>
                   <p className="text-sm text-[#5E331E] font-medium">Badge</p>
                 </div>

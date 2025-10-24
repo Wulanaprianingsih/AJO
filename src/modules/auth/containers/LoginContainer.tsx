@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import { message } from "antd";
 import { supabase } from "lib/supabaseClient";
 import LoginComponent from "../components/LoginComponent";
-import { useUserStore } from "store/userDataStore";
+import { fetchUserData } from "services/userService";
 
 interface IProps {
   email: string;
@@ -13,7 +13,6 @@ interface IProps {
 
 export default function LoginContainer() {
   const router = useRouter();
-  const setSelectedCourse = useUserStore((s) => s.setUserProfile);
 
   const handleLogin = async (props: IProps) => {
     const { email, password } = props;
@@ -25,22 +24,17 @@ export default function LoginContainer() {
         });
       if (authError) throw new Error(authError.message);
       if (!authData.user) throw new Error("User tidak ditemukan.");
-      const { data: userData, error: userError } = await supabase
-        .from("users")
-        .select("*")
-        .eq("id", authData.user.id)
-        .maybeSingle();
 
-      if (userError) throw new Error(userError.message);
-      setSelectedCourse(userData);
+      await fetchUserData(authData.user.id);
+
       message.success("Login berhasil!");
 
       router.push("/dashboard");
     } catch (err) {
       if (err instanceof Error) {
-        alert("Register gagal: " + err.message);
+        alert("login gagal: " + err.message);
       } else {
-        alert("Register gagal: Terjadi kesalahan tidak terduga.");
+        alert("login gagal: Terjadi kesalahan tidak terduga.");
       }
     }
   };

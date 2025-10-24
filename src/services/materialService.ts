@@ -1,25 +1,29 @@
 import { supabase } from "lib/supabaseClient"
 import { useMaterialState } from "store/materialStore"
+import { IExcerciseHistory } from "types/material"
 
 export const fetchMaterials = async () => {
     const setMaterial = useMaterialState.getState().setMaterials
 
     const { data: materials, error } = await supabase
         .from("materials")
-        .select("*, excercises ( * )")
+        .select("*, excercises ( * ), user_excercise_history ( * ) ")
 
     if (error) {
         console.error("error fetch materials:", error)
         return
     }
 
+
     const modifiedMaterials = materials.map((m, i) => ({
         ...m,
         key: i,
+        excercise_history: m.user_excercise_history?.sort(
+            (a: IExcerciseHistory, b: IExcerciseHistory) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+        ),
     }))
 
     setMaterial(modifiedMaterials)
-    console.log('modifiedMaterials', modifiedMaterials)
 }
 
 export const uploadImage = async (path: string, filename: string, file: File) => {
@@ -49,14 +53,14 @@ export const uploadImage = async (path: string, filename: string, file: File) =>
 
 export const deleteMaterial = async (materialId: number) => {
     try {
-      const { error } = await supabase
-        .from('materials')
-        .delete()
-        .eq('id', materialId)
-      if (error) console.log('error', error)
-      else console.log('success delete'); fetchMaterials()
+        const { error } = await supabase
+            .from('materials')
+            .delete()
+            .eq('id', materialId)
+        if (error) console.log('error', error)
+        else console.log('success delete'); fetchMaterials()
     } catch (e) {
-      console.log('error', e)
+        console.log('error', e)
     }
 }
 

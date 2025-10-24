@@ -4,6 +4,9 @@ import React, { useState } from "react";
 import { Card, Radio, Button, Progress } from "antd";
 import Image from "next/image";
 
+interface IExcercise {
+  onSubmit: (point: number) => Promise<void>;
+}
 interface IQuestion {
   id: number;
   type: "text" | "image";
@@ -90,10 +93,12 @@ const dummyQuestions: IQuestion[] = [
   },
 ];
 
-export default function ExercisesComponent() {
+export default function ExercisesComponent(props: IExcercise) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [answers, setAnswers] = useState<Record<number, string>>({});
   const [submitted, setSubmitted] = useState(false);
+
+  const { onSubmit } = props;
 
   const currentQuestion = dummyQuestions[currentIndex];
   const progressPercent = ((currentIndex + 1) / dummyQuestions.length) * 100;
@@ -235,7 +240,7 @@ export default function ExercisesComponent() {
           </h2>
           <p className="text-sm opacity-70">Latihan Tembung Kriya</p>
         </div>
-
+        <Button onClick={() => onSubmit(100)}>Test Submit</Button>
         <Card
           style={{
             backgroundColor: "#FCF8E7",
@@ -256,6 +261,9 @@ export default function ExercisesComponent() {
                 fill
                 className="object-cover"
               />
+              <h3 className="text-[#5E331E] text-lg font-medium mb-4">
+                {currentQuestion.question}
+              </h3>
             </div>
           )}
 

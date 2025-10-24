@@ -11,18 +11,26 @@ import level3 from "assets/icons/level3.png";
 
 import { UpOutlined, DownOutlined } from "@ant-design/icons";
 import { Tooltip } from "antd";
+import { IExcerciseHistory } from "types/material";
 
 interface IMateriLevel {
   levelTitle: string;
   description?: string;
-  materi: { title: string; score?: number; description?: string }[];
+  materi: {
+    title: string;
+    description?: string;
+    id?: number;
+    excercise_history: IExcerciseHistory[];
+    last_point: number;
+  }[];
 }
 
 interface IProps {
   userData?: { scores: Record<string, number> };
-  onNavigate: (materi: { title: string; level: number }) => void;
+  onNavigate: (materi: { title: string; id: number }) => void;
   openLevel: number | null;
   setOpenLevel: Dispatch<SetStateAction<number | null>>;
+  levels: IMateriLevel[];
 }
 
 export default function MaterialListComponent({
@@ -30,83 +38,9 @@ export default function MaterialListComponent({
   onNavigate,
   openLevel,
   setOpenLevel,
+  levels,
 }: IProps) {
   const KKM = 70;
-
-  const levels: IMateriLevel[] = [
-    {
-      levelTitle: "Level 1 – Dasar Basa (Pemula)",
-      description:
-        "Mulai perjalananmu mengenal Bahasa Jawa dari kosakata sehari-hari, sapaan, dan ungkapan sopan. Selesaikan level ini untuk bisa berkomunikasi sederhana dengan percaya diri!",
-      materi: [
-        {
-          title: "Kosakata dasar dan sapaan",
-          description: "Pelajari sapaan sehari-hari",
-        },
-        { title: "Unggah-ungguh basa", description: "Cara berbicara sopan" },
-        {
-          title: "Ungkapan kesopanan dan emosi",
-          description: "Ekspresikan perasaan dengan tepat",
-        },
-        {
-          title: "Kalimat sehari-hari",
-          description: "Kalimat sederhana dalam percakapan",
-        },
-        {
-          title: "Paribasan sederhana",
-          description: "Pepatah Jawa untuk kehidupan",
-        },
-      ],
-    },
-    {
-      levelTitle: "Level 2 – Aksara dan Adat (Menengah)",
-      description:
-        "Belajar aksara Jawa, memahami budaya melalui kata, serta mencoba ungkapan sopan yang lebih kompleks. Tantang dirimu untuk bisa menguasainya!",
-      materi: [
-        { title: "Aksara Jawa dasar", description: "Mengenal huruf Jawa" },
-        {
-          title: "Membaca kalimat aksara Jawa pendek",
-          description: "Praktik membaca kalimat",
-        },
-        {
-          title: "Kosakata budaya (pakaian, makanan, tradisi, dan lain-lain)",
-          description: "Belajar kata-kata budaya",
-        },
-        { title: "Unggah-ungguh Madya", description: "Tata krama menengah" },
-        {
-          title: "Paribasan dan pitutur luhur",
-          description: "Pepatah dan nasehat luhur",
-        },
-      ],
-    },
-    {
-      levelTitle: "Level 3 – Luhur dan Budaya (Mahir)",
-      description:
-        "Kuasi Bahasa Jawa tingkat mahir: komunikasi formal, paribasan, tembang macapat, dan nilai-nilai luhur. Saatnya menciptakan kalimatmu sendiri dan merasakan kekayaan budaya Jawa!",
-      materi: [
-        {
-          title: "Krama Inggil atau komunikasi formal",
-          description: "Berbicara formal dengan sopan",
-        },
-        {
-          title: "Cerita rakyat dan wayang (Ramayana, Mahabharata)",
-          description: "Belajar cerita rakyat dan tokoh wayang",
-        },
-        {
-          title: "Paribasan dan wangsalan tingkat lanjut",
-          description: "Pepatah dan teka-teki bahasa",
-        },
-        {
-          title: "Tembang macapat dan nilai moral",
-          description: "Lagu dan puisi tradisional",
-        },
-        {
-          title: "Nilai-nilai luhur (andhap asor, rukun, gotong royong)",
-          description: "Belajar nilai budaya",
-        },
-      ],
-    },
-  ];
 
   const levelIcons = [level1, level2, level3];
 
@@ -117,16 +51,6 @@ export default function MaterialListComponent({
       (m) => (userData?.scores[m.title] ?? 0) >= KKM
     );
   };
-
-  const checkMateriUnlocked = (
-    materiList: { title: string; score?: number }[],
-    index: number
-  ) => {
-    if (index === 0) return true;
-    const prevScore = userData?.scores[materiList[index - 1].title] ?? 0;
-    return prevScore >= KKM;
-  };
-
   return (
     <MainLayout>
       <div className="px-4 md:px-8 pb-10">
@@ -138,7 +62,8 @@ export default function MaterialListComponent({
         </div>
 
         <div className="mt-6 space-y-6">
-          {levels.map((level, idx) => {
+          {levels.map((level: IMateriLevel, idx) => {
+            // const unlocked = idx === 0 || levels[idx - 1].materi.every((x) => x.last_point >= KKM)
             const unlocked = isLevelUnlocked(idx);
             return (
               <div
@@ -189,9 +114,11 @@ export default function MaterialListComponent({
                 {openLevel === idx && unlocked && (
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 p-5">
                     {level.materi.map((m, mi) => {
-                      const isUnlocked = checkMateriUnlocked(level.materi, mi);
-                      const score = userData?.scores[m.title] ?? 0;
-                      const attempts = 1;
+                      const isUnlocked =
+                        mi === 0 || level.materi[mi - 1].last_point >= KKM;
+                      // const isUnlocked = checkMateriUnlocked(level.materi, mi);
+                      const score = m.last_point ?? 0;
+                      const attempts = m.excercise_history?.length ?? 0;
                       // const attempts = userData?.attempts?.[m.title] ?? 1; // harusnya ini
                       const status =
                         score >= KKM ? "✅ Lulus" : "❌ Belum Lulus";
@@ -220,7 +147,7 @@ export default function MaterialListComponent({
             }`}
                             onClick={() =>
                               isUnlocked &&
-                              onNavigate({ title: m.title, level: idx + 1 })
+                              onNavigate({ title: m.title, id: Number(m.id) })
                             }
                           >
                             <div className="flex items-center gap-3">

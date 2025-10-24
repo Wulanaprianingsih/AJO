@@ -35,6 +35,11 @@ interface IUserData {
   level: number
 }
 
+interface ISubmitExcercise {
+  point: number,
+  material_id: number,
+}
+
 export interface IDetailCourse {
   id: number;
   title: string;         
@@ -52,4 +57,4 @@ export interface IQuiz {
 }
 
 
-export type { ICourse, IOptions, IQuestion, IAnswered, IUserData, IDetailCourse, IQuiz }
+export type { ICourse, IOptions, IQuestion, IAnswered, IUserData, IDetailCourse, IQuiz, ISubmitExcercise }

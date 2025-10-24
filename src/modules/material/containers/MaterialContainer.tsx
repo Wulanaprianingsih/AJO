@@ -3,37 +3,36 @@
 import React, { useState } from "react";
 import MaterialComponent from "../components/MaterialComponent";
 // import { useCourseStore } from "store/courseStore";
-import { useRouter } from "next/navigation";
+import { useRouter, useParams } from "next/navigation";
 import { IDetailCourse } from "types/course";
+import { useMaterialState } from "store/materialStore";
 
 export default function MaterialContainer() {
-  // const course = useCourseStore((s) => s.selectedCourse);
+  const material = useMaterialState((s) => s.materials);
   const router = useRouter();
+  const params = useParams()
   const [selectedOption, setSelectedOption] = useState<string>("");
-  const id = "tembungKriya";
 
+  const materiId = params.id
+
+  const detailMaterial = material.find((x) => x.id.toString() == materiId?.toString())
   const handleNavigate = () => {
-    router.push(`/exercises/${id}`);
+    router.push(`/exercises/${materiId}`);
   };
 
+  console.log('detailMaterial', detailMaterial)
+
   const dummyCourse: IDetailCourse = {
-    id: 1,
-    title: "Tembung Kriya (Kata Kerja)",
-    description:
-      "Pada materi ini, kamu akan belajar tentang tembung kriya, yaitu kata yang menunjukkan suatu tindakan atau pekerjaan.",
-    media_url: "https://res.cloudinary.com/demo/image/upload/sample.jpg", //kalo video bisa link yt
-    media_type: "image", // bisa video
-    content_text: `
-  Tembung kriya yaiku tembung sing nuduhake tumindak utawa pakaryan.
-  Conto:
-  - Mangan (makan)
-  - Mlaku (berjalan)
-  - Nulis (menulis)
-  `,
+    id: Number(detailMaterial?.id),
+    title: detailMaterial?.title ?? '',
+    description: detailMaterial?.description ?? '',
+    media_url: detailMaterial?.media_url, 
+    media_type: detailMaterial?.media_type, 
+    content_text: detailMaterial?.content_text ?? '',
     quiz: {
-      question: "Ngendi sing kalebu tembung kriya?",
-      options: ["Gedhe", "Mlaku", "Ijo", "Endah"],
-      correctAnswer: "Mlaku",
+      question: detailMaterial?.sample_quiz.question ?? '',
+      options: detailMaterial?.sample_quiz.options ?? [''],
+      correctAnswer: detailMaterial?.sample_quiz.answer ?? ''
     },
   };
 
