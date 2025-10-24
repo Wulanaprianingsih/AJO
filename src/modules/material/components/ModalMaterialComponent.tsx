@@ -108,7 +108,7 @@ export default function ModalMaterialSampleComponent({
         reset();
         handleCancel();
       }}
-      handleOk={() => {}}
+      handleOk={handleSubmit(onFinish)}
     >
       <FormProvider {...methods}>
         <form onSubmit={handleSubmit(onFinish)}>

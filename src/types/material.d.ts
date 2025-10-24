@@ -2,6 +2,7 @@ interface ISampleQuiz {
   question: string;
   options: string[];
   answer: string;
+  correctAnswer: string;
 }
 
 interface IExcerciseData {
