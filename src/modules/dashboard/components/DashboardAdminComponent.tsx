@@ -16,20 +16,25 @@ import {
   UserOutlined,
   FileDoneOutlined,
 } from "@ant-design/icons";
+import { UserProps } from "types/userData";
+import { IExcerciseData, IMaterialData } from "types/materi";
 
 const { Title } = Typography;
 
-export default function DashboardAdminComponent() {
-  const materiTerbaru = [
-    { id: 1, title: "Aksara Jawa Dasar", level: "Pemula" },
-    { id: 2, title: "Sandhangan", level: "Menengah" },
-    { id: 3, title: "Pasangan Aksara", level: "Menengah" },
-  ];
+interface IProps {
+  users: UserProps[];
+  excercises: IExcerciseData[];
+  materials: IMaterialData[];
+  newestMaterial: IMaterialData[];
+}
 
-  const latihanTerbaru = [
-    { id: 1, title: "Latihan Aksara Dasar", totalSoal: 10 },
-    { id: 2, title: "Latihan Sandhangan", totalSoal: 8 },
-  ];
+export default function DashboardAdminComponent(props: IProps) {
+  const { users, excercises, materials, newestMaterial } = props;
+  const LEVEL_MAP: Record<string, string> = {
+    "1": "Pemula",
+    "2": "Menengah",
+    "3": "Master",
+  };
 
   return (
     <MainLayout>
@@ -54,7 +59,7 @@ export default function DashboardAdminComponent() {
             >
               <Statistic
                 title="Total Pengguna"
-                value={128}
+                value={users?.length ?? 0}
                 prefix={<UserOutlined style={{ color: "#5E331E" }} />}
                 valueStyle={{ color: "#5E331E" }}
               />
@@ -71,7 +76,7 @@ export default function DashboardAdminComponent() {
             >
               <Statistic
                 title="Total Materi"
-                value={12}
+                value={materials?.length ?? 0}
                 prefix={<BookOutlined style={{ color: "#5E331E" }} />}
                 valueStyle={{ color: "#5E331E" }}
               />
@@ -88,7 +93,7 @@ export default function DashboardAdminComponent() {
             >
               <Statistic
                 title="Total Latihan"
-                value={25}
+                value={excercises?.length ?? 0}
                 prefix={<FileDoneOutlined style={{ color: "#5E331E" }} />}
                 valueStyle={{ color: "#5E331E" }}
               />
@@ -115,12 +120,14 @@ export default function DashboardAdminComponent() {
           }
         >
           <List
-            dataSource={materiTerbaru}
+            dataSource={newestMaterial}
             renderItem={(item) => (
               <List.Item>
                 <Space direction="vertical" size={0}>
                   <p className="text-[#5E331E] font-medium">{item.title}</p>
-                  <p className="text-[#5E331E]">Level: {item.level}</p>
+                  <p className="text-[#5E331E]">
+                    Level: {LEVEL_MAP[item.level]}
+                  </p>
                 </Space>
               </List.Item>
             )}
@@ -147,12 +154,16 @@ export default function DashboardAdminComponent() {
           }
         >
           <List
-            dataSource={latihanTerbaru}
+            dataSource={newestMaterial}
             renderItem={(item) => (
               <List.Item>
                 <Space direction="vertical" size={0}>
-                  <p className="text-[#5E331E] font-medium">{item.title}</p>
-                  <p className="text-[#5E331E]">{item.totalSoal} Soal</p>
+                  <p className="text-[#5E331E] font-medium">
+                    Latihan {item.title}
+                  </p>
+                  <p className="text-[#5E331E]">
+                    {item.excercises.length} Soal
+                  </p>
                 </Space>
               </List.Item>
             )}

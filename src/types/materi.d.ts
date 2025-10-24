@@ -2,7 +2,27 @@ interface ISampleQuiz {
   question: string;
   options: string[];
   answer: string;
-  correctAnswer: string
+  correctAnswer?: number; 
+}
+
+interface IExcerciseData {
+  image_url: string | undefined;
+  title: string;
+  material_id: string;
+  question: string;
+  answer: string;
+  options: string[];
+  id: number
+  created_at: string;
+}
+
+interface IExcercisePayload {
+  image_url: string | undefined;
+  title: string;
+  material_id: string;
+  question: string;
+  answer: string;
+  options: string[];
 }
 
 
@@ -34,7 +54,8 @@ interface IMaterialData {
   sample_quiz: ISampleQuiz;
   updated_date: string;
   created_at: string;
-  status: "aktif" | "nonaktif"
+  status: "aktif" | "nonaktif";
+  excercises: IExcerciseData[]
 }
 
-export type { IMaterialForm, IMaterialData }
+export type { IMaterialForm, IMaterialData, IExcerciseData, IExcercisePayload }

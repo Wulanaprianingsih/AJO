@@ -28,11 +28,11 @@ export default function Modal({
       centered
       width={width}
       style={{
-        top: 32, // jarak dari atas layar
-        paddingBottom: 32, // jarak bawah biar ga nempel Chrome
-        maxHeight: "75vh", // batasi tinggi modal maksimal 75% viewport
-        overflowY: "auto", // biar bisa scroll di dalam modal
-        background: "#fff9f2", // krem lembut khas AJO
+        top: 32,
+        paddingBottom: 32,
+        maxHeight: "75vh",
+        overflowY: "auto",
+        background: "#fff5e6",
         padding: "24px 28px",
         borderRadius: 16,
       }}

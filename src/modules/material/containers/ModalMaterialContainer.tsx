@@ -3,6 +3,7 @@ import { IMaterialForm } from "types/material";
 import { supabase } from "lib/supabaseClient";
 import ModalMaterialComponent from "../components/ModalMaterialComponent";
 import { useMaterialState } from "store/materialStore";
+import { uploadImage } from "services/materialService";
 
 interface IProps {
   openModal: boolean;
@@ -20,42 +21,10 @@ export default function ModalMaterialContainer(props: IProps) {
     setOpenModal(false);
   };
 
-  const uploadImage = async (filename: string, file: File) => {
-    try {
-      // upload img
-      const { error: uploadError } = await supabase.storage
-        .from("materials")
-        .upload(`thumbnail/${filename}`, file, {
-          cacheControl: "3600",
-          upsert: true,
-        });
-
-      if (uploadError) {
-        console.log("error upload : ", uploadError);
-        return;
-      }
-
-      console.log("imgae uploaded");
-
-      // get img url
-      const { data: imgUrl } = await supabase.storage
-        .from("materials")
-        .getPublicUrl(`thumbnail/${filename}`);
-
-      return imgUrl;
-    } catch (e) {
-      console.log("error upload process", e);
-    }
-  };
-
   const handleSubmit = async (payload: IMaterialForm) => {
     const file = payload?.thumbnail_file?.file;
     if (!file) return;
-    console.log("file", file);
-
-    const imgUrl = await uploadImage(file.name, file);
-
-    console.log("imgUrl", imgUrl);
+    const imgUrl = await uploadImage("thumbnail", file.name, file);
     delete payload.thumbnail_file;
 
     payload.thumbnail = imgUrl?.publicUrl;
@@ -85,7 +54,7 @@ export default function ModalMaterialContainer(props: IProps) {
     } else {
       const file = payload?.thumbnail_file?.file;
       if (!file) return;
-      const imgUrl = await uploadImage(file.name, file);
+      const imgUrl = await uploadImage("thumbnail", file.name, file);
 
       console.log("imgUrl", imgUrl);
       delete payload.thumbnail_file;
@@ -110,7 +79,6 @@ export default function ModalMaterialContainer(props: IProps) {
   };
 
   return (
-    // <ModalMaterialComponent openModal={openModal} handleCancel={handleCancel} onSubmit={handleSubmit} />
     <ModalMaterialComponent
       openModal={openModal}
       handleCancel={handleCancel}

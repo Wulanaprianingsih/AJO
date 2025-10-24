@@ -11,6 +11,7 @@ interface InputsProps {
   onChange: (value: string | number) => void;
   onBlur?: () => void;
   error?: string;
+  maxValue?: number;
 }
 
 export default function Inputs(props: InputsProps) {
@@ -22,6 +23,7 @@ export default function Inputs(props: InputsProps) {
     onChange,
     onBlur,
     error,
+    maxValue,
   } = props;
 
   const renderInput = () => {
@@ -29,7 +31,7 @@ export default function Inputs(props: InputsProps) {
       return (
         <Input.Password
           placeholder={placeholder}
-          value={String(value)}
+          value={String(value ?? "")}
           onChange={(e) => onChange(e.target.value)}
           onBlur={onBlur}
           className="custom-password"
@@ -39,18 +41,28 @@ export default function Inputs(props: InputsProps) {
       return (
         <InputNumber
           min={1}
-          max={3}
-          value={Number(value)}
+          max={maxValue}
+          value={Number(value ?? 0)}
           onChange={(val) => onChange(val ?? 0)}
           className="w-full custom-number"
         />
       );
     } else if (type === "textArea") {
-      return <TextArea placeholder={placeholder} autoSize />;
+      return (
+        <TextArea
+          placeholder={placeholder}
+          value={String(value ?? "")}
+          onChange={(e) => onChange(e.target.value)}
+          onBlur={onBlur}
+          autoSize
+          className="custom-input"
+        />
+      );
     }
     return (
       <Input
         placeholder={placeholder}
+        value={String(value ?? "")}
         onChange={(e) => onChange(e.target.value)}
         onBlur={onBlur}
         className="custom-input"
