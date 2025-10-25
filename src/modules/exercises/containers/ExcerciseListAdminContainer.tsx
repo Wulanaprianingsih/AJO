@@ -49,7 +49,6 @@ export default function ExcerciseListAdminContainer() {
         title: m.title,
       }));
       setMateriList(materiOption);
-      console.log("materiList updated:", materiOption);
     }
   }, [materials]);
 
@@ -90,7 +89,6 @@ export default function ExcerciseListAdminContainer() {
   };
 
   const onSubmit = handleSubmit(async (data) => {
-    console.log("Submitted:", data);
     let imgUrl = null;
 
     if (data.image) {
