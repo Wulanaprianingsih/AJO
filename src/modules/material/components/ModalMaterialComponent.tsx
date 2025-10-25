@@ -26,7 +26,7 @@ interface IProps {
   defaultValue: IMaterialData | null;
 }
 
-export default function ModalMaterialSampleComponent({
+export default function ModalMaterialComponent({
   openModal,
   handleCancel,
   onSubmit,
