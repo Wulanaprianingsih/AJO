@@ -1,10 +1,10 @@
 "use client";
 import React from "react";
 import { useRouter } from "next/navigation";
-import { message } from "antd";
 import { supabase } from "lib/supabaseClient";
 import LoginComponent from "../components/LoginComponent";
 import { fetchUserData } from "services/userService";
+import { toast } from "react-toastify";
 
 interface IProps {
   email: string;
@@ -27,14 +27,19 @@ export default function LoginContainer() {
 
       await fetchUserData(authData.user.id);
 
-      message.success("Login berhasil!");
-
       router.push("/dashboard");
+      toast.success("Login berhasil", {
+        position: "top-right",
+      });
     } catch (err) {
       if (err instanceof Error) {
-        alert("login gagal: " + err.message);
+        toast.error(`Login gagal: ${+err.message}`, {
+          position: "top-right",
+        });
       } else {
-        alert("login gagal: Terjadi kesalahan tidak terduga.");
+        toast.error("Login gagal: Terjadi kesalahan tidak terduga", {
+          position: "top-right",
+        });
       }
     }
   };

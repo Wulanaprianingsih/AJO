@@ -3,27 +3,28 @@ import React from "react";
 import { useRouter } from "next/navigation";
 import { supabase } from "lib/supabaseClient";
 import RegisterComponent from "../components/RegisterComponent";
+import { toast } from "react-toastify";
 
 interface IProps {
-  email: string
-  password: string
-  nama: string
+  email: string;
+  password: string;
+  nama: string;
 }
 
 export function RegisterContainer() {
   const router = useRouter();
 
   const registerUser = async (props: IProps) => {
-    const { email, password, nama } = props
+    const { email, password, nama } = props;
     try {
       const { data, error: authError } = await supabase.auth.signUp({
         email,
         password,
         options: {
-          emailRedirectTo: 'http://localhost:3000/auth/login',
+          emailRedirectTo: "https://ajo-pi.vercel.app/auth/login",
         },
-      })
-     
+      });
+
       if (authError) {
         throw new Error(authError.message);
       }
@@ -37,13 +38,19 @@ export function RegisterContainer() {
       ]);
 
       if (insertError) throw new Error(insertError.message);
-
+      toast.success("Register berhasil", {
+        position: "top-right",
+      });
       router.push("/auth/login");
     } catch (err) {
       if (err instanceof Error) {
-        alert("Register gagal: " + err.message);
+        toast.error(`Register gagal: ${+err.message}`, {
+          position: "top-right",
+        });
       } else {
-        alert("Register gagal: Terjadi kesalahan tidak terduga.");
+        toast.error("Register gagal: Terjadi kesalahan tidak terduga", {
+          position: "top-right",
+        });
       }
     }
   };

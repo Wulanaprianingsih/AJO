@@ -1,6 +1,8 @@
 import { Inter } from "next/font/google";
 import "./globals.css";
 import GlobalLoading from "./GlobalLoading";
+import "react-toastify/dist/ReactToastify.css";
+import { ToastContainer } from "react-toastify";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -21,7 +23,20 @@ export default function RootLayout({
   return (
     <html lang="id" className={inter.variable}>
       <body className="font-inter antialiased">
-        <GlobalLoading>{children}</GlobalLoading>
+        <GlobalLoading>
+          {children}
+          <ToastContainer
+            position="top-right"
+            autoClose={3000}
+            hideProgressBar={false}
+            newestOnTop={false}
+            closeOnClick
+            rtl={false}
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover
+          />
+        </GlobalLoading>
       </body>
     </html>
   );
