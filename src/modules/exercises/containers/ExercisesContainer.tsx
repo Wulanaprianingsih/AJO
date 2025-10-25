@@ -23,6 +23,8 @@ export default function ExercisesContainer() {
     (x) => x.id.toString() == materiId?.toString()
   );
 
+  console.log("detailMaterial", detailMaterial);
+
   const excercises = detailMaterial?.excercises.map((ex) => ({
     id: ex.id,
     type: ex.image_url ? "image" : "text",
@@ -98,7 +100,7 @@ export default function ExercisesContainer() {
         }
       } else {
         if (calculatedPoint === 100) {
-          badges.push({ name: "Ahli Materi" + detailMaterial?.title });
+          badges.push({ name: "Ahli Materi " + detailMaterial?.title });
         }
       }
 
@@ -136,5 +138,11 @@ export default function ExercisesContainer() {
     }
   };
 
-  return <ExercisesComponent onSubmit={handleSubmit} data={excercises} />;
+  return (
+    <ExercisesComponent
+      onSubmit={handleSubmit}
+      data={excercises}
+      userAnswers={detailMaterial?.user_answers?.[0].answer}
+    />
+  );
 }

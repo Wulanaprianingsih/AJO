@@ -13,27 +13,28 @@ interface IQuestion {
   options: string[];
   answer: string;
   image_url?: string;
-  title: string
+  title: string;
 }
 interface IExcercise {
-  onSubmit: (point: number, answer: Record<number, string> ) => Promise<void>;
-  data: IQuestion[] | undefined
+  onSubmit: (point: number, answer: Record<number, string>) => Promise<void>;
+  data: IQuestion[] | undefined;
+  userAnswers: Record<number, string> | undefined;
 }
 
 export default function ExercisesComponent(props: IExcercise) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [answers, setAnswers] = useState<Record<number, string>>({});
   const [submitted, setSubmitted] = useState(false);
-  const route = useRouter()
+  const route = useRouter();
 
-  const { onSubmit, data } = props;
-
-  console.log('data', data)
+  const { onSubmit, data, userAnswers } = props;
 
   if (!data || data.length === 0) {
-    return <MainLayout>
-      <EmptyQuestion />
-    </MainLayout>
+    return (
+      <MainLayout>
+        <EmptyQuestion />
+      </MainLayout>
+    );
   }
 
   const currentQuestion = data[currentIndex];
@@ -55,13 +56,15 @@ export default function ExercisesComponent(props: IExcercise) {
     }
   };
 
-  const correctCount = data.filter(
-    (q) => answers[q.id] === q.answer
-  ).length;
+  const correctCount = data.filter((q) => answers[q.id] === q.answer).length;
 
   const handleSubmit = () => {
-    setSubmitted(true);
-    onSubmit(correctCount * 10, answers)
+    if (userAnswers) {
+      route.push("/material");
+    } else {
+      setSubmitted(true);
+      onSubmit(correctCount * 10, answers);
+    }
   };
 
   const total = data.length;
@@ -87,7 +90,7 @@ export default function ExercisesComponent(props: IExcercise) {
             trailColor="#EDE3D2"
           />
 
-          <div className="mt-6 space-y-4 text-left">
+          <div className="mt-6 !space-y-4 text-left">
             {data.map((q) => {
               const userAnswer = answers[q.id];
               const isCorrect = userAnswer === q.answer;
@@ -101,11 +104,13 @@ export default function ExercisesComponent(props: IExcercise) {
                     padding: "20px",
                   }}
                 >
-                  <p className="font-semibold text-[#5E331E] mb-2">{q.question}</p>
+                  <p className="font-semibold text-[#5E331E] mb-2">
+                    {q.question}
+                  </p>
                   {q.image_url && (
                     <div>
                       <Image
-                        src={q.image_url ?? ''}
+                        src={q.image_url ?? ""}
                         alt={`Soal ${q.id}`}
                         width={300}
                         height={180}
@@ -116,8 +121,9 @@ export default function ExercisesComponent(props: IExcercise) {
                   <p>
                     Jawaban kamu:{" "}
                     <span
-                      className={`font-semibold ${isCorrect ? "text-green-600" : "text-red-600"
-                        }`}
+                      className={`font-semibold ${
+                        isCorrect ? "text-green-600" : "text-red-600"
+                      }`}
                     >
                       {userAnswer || "Belum dijawab"}
                     </span>
@@ -137,8 +143,8 @@ export default function ExercisesComponent(props: IExcercise) {
 
           <Button
             onClick={() => {
-              if (correctCount >= 7){
-                route.push('/material')
+              if (correctCount >= 7) {
+                route.push("/material");
               } else {
                 setSubmitted(false);
                 setCurrentIndex(0);
@@ -156,7 +162,7 @@ export default function ExercisesComponent(props: IExcercise) {
               marginTop: 20,
             }}
           >
-           {correctCount >= 7 ? 'Lanjut ke Materi' : 'Ulangi Latihan'}
+            {correctCount >= 7 ? "Lanjut ke Materi" : "Ulangi Latihan"}
           </Button>
         </div>
       </MainLayout>
@@ -179,7 +185,7 @@ export default function ExercisesComponent(props: IExcercise) {
           </h2>
           <p className="text-sm opacity-70">{currentQuestion.title}</p>
         </div>
-        <Button onClick={() => onSubmit(100, answers)}>Test Submit</Button>
+        {/* <Button onClick={() => onSubmit(100, answers)}>Test Submit</Button> */}
         <Card
           style={{
             backgroundColor: "#FCF8E7",
@@ -196,7 +202,7 @@ export default function ExercisesComponent(props: IExcercise) {
             <>
               <div className="relative w-full h-[250px] mb-4 rounded-xl overflow-hidden">
                 <Image
-                  src={currentQuestion.image_url ?? ''}
+                  src={currentQuestion.image_url ?? ""}
                   alt={`Soal ${currentQuestion.id}`}
                   fill
                   className="object-cover"
@@ -210,15 +216,21 @@ export default function ExercisesComponent(props: IExcercise) {
 
           <Radio.Group
             onChange={(e) => handleSelect(e.target.value)}
-            value={answers[currentQuestion.id]}
+            value={
+              userAnswers
+                ? userAnswers[currentQuestion.id]
+                : answers[currentQuestion.id]
+            }
             className="!flex flex-col gap-2"
+            disabled
           >
             {currentQuestion.options.map((op, i) => (
               <Radio
                 key={i}
                 value={op}
-                className={`px-3 py-2 rounded-lg text-[#5E331E] hover:bg-[#F0E8D8] ${answers[currentQuestion.id] === op ? "bg-[#EAD3B3]" : ""
-                  }`}
+                className={`px-3 py-2 rounded-lg text-[#5E331E] hover:bg-[#F0E8D8] ${
+                  answers[currentQuestion.id] === op ? "bg-[#EAD3B3]" : ""
+                }`}
               >
                 {op}
               </Radio>

@@ -51,6 +51,13 @@ interface IExcerciseHistory {
   created_at: string
 }
 
+
+interface IUserAnswers {
+  user_id: string
+  answer: Record<number, string>,
+  material_id: number
+} 
+
 interface IMaterialData {
   id: number
   level: string;
@@ -64,9 +71,11 @@ interface IMaterialData {
   sample_quiz: ISampleQuiz;
   updated_date: string;
   created_at: string;
-  status: "aktif" | "nonaktif" | "active" | "inactive";
+  status: "aktif" | "nonaktif"
   excercises: IExcerciseData[]
   excercise_history: IExcerciseHistory[]
+  user_answers: IUserAnswers[]
+
 }
 
 export type { IMaterialForm, IMaterialData, IExcerciseData, IExcercisePayload, IExcerciseHistory }
