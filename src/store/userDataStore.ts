@@ -6,7 +6,7 @@ interface UserProfileState {
     userProfile: UserProps | null
     setUserProfile: (user: UserProps) => void;
     allUser: UserProps[]
-    setAllUser: (user: any[]) => void;
+    setAllUser: (user: UserProps[]) => void;
 }
 
 export const useUserStore = create<UserProfileState>()(
