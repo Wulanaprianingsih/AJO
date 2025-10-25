@@ -127,3 +127,27 @@ body {
 .custom-password.ant-input-password .ant-input-suffix {
   color: #5e331e;
 }
+/* ========================POPUP CONFIRM============================ */
+.custom-popconfirm .ant-popover-inner {
+  background-color: #fcf8e7 !important;
+  color: #5e331e !important;
+  border-radius: 12px;
+  padding: 16px;
+}
+
+.custom-popconfirm .ant-popover-message-title {
+  color: #5e331e !important;
+  font-weight: 600;
+}
+
+.custom-popconfirm .ant-btn-primary {
+  background-color: #dab68a !important;
+  border-color: #dab68a !important;
+  color: #5e331e !important;
+  font-weight: 600;
+}
+
+.custom-popconfirm .ant-btn-default {
+  color: #5e331e !important;
+  border-color: #e0c4a1 !important;
+}

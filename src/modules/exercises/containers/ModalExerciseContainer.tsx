@@ -6,15 +6,7 @@ import ModalExerciseComponent, {
 import { insertExcercises } from "services/excerciseService";
 import { uploadImage } from "services/materialService";
 import { useMaterialState } from "store/materialStore";
-
-interface IExercisePayload {
-  image_url: string | undefined;
-  title: string;
-  material_id: string;
-  question: string;
-  answer: string;
-  options: { text: string }[];
-}
+import { IExcercisePayload } from "types/course";
 
 interface IProps {
   openModal: boolean;
@@ -47,7 +39,7 @@ export default function ModalExerciseContainer({
         imgUrl = uploaded?.publicUrl;
       }
 
-      const payload: IExercisePayload = {
+      const payload: IExcercisePayload = {
         title: data.title,
         material_id: data.material_id,
         question: data.quiz.question,

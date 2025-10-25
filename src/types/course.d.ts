@@ -55,6 +55,14 @@ export interface IQuiz {
   options: string[];      
   answer: string; 
 }
+interface IExcercisePayload {
+  image_url: string | undefined;
+  title: string;
+  material_id: string;
+  question: string;
+  answer: string;
+  options: { text: string }[];
+}
 
 
-export type { ICourse, IOptions, IQuestion, IAnswered, IUserData, IDetailCourse, IQuiz, ISubmitExcercise }
+export type { ICourse, IOptions, IQuestion, IAnswered, IUserData, IDetailCourse, IQuiz, ISubmitExcercise, IExcercisePayload }

@@ -135,7 +135,7 @@ export default function ModalExerciseComponent({
               <Select
                 label="Materi"
                 placeholder="Pilih materi"
-                optionList={materiList.map((m) => ({
+                optionList={materiList?.map((m) => ({
                   label: m.title,
                   value: m.id,
                 }))}

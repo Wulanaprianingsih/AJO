@@ -1,10 +1,9 @@
-import { Button, Space, Table } from "antd";
+import { Button, Table } from "antd";
 import MainLayout from "assets/components/layouts/MainLayout";
 import React from "react";
 import { UseFormRegister, FieldErrors } from "react-hook-form";
-import { deleteExcercise } from "services/excerciseService";
 import { IExcerciseData } from "types/materi";
-import { EditOutlined, DeleteOutlined, PlusOutlined } from "@ant-design/icons";
+import { PlusOutlined } from "@ant-design/icons";
 
 export type QuestionFormValues = {
   title: string;
@@ -28,49 +27,43 @@ type Props = {
   onSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
   handleSelectItem: (data: IExcerciseData) => void;
   setOpenModal: React.Dispatch<React.SetStateAction<boolean>>;
+  columns: (
+    | {
+        title: string;
+        dataIndex: string;
+        key: string;
+        align?: undefined;
+        render?: undefined;
+      }
+    | {
+        title: string;
+        dataIndex: string;
+        key: string;
+        align: "center";
+        render?: undefined;
+      }
+    | {
+        title: string;
+        dataIndex: string;
+        key: string;
+        align: "center";
+        render: (value: string) => string;
+      }
+    | {
+        title: string;
+        key: string;
+        align: "center";
+        render: (data: IExcerciseData) => React.JSX.Element;
+        dataIndex?: undefined;
+      }
+  )[];
 };
 
 const ExcerciseListAdminComponent: React.FC<Props> = ({
   data,
-  handleSelectItem,
   setOpenModal,
+  columns,
 }) => {
-  console.log("data", data);
-
-  const columns = [
-    {
-      title: "Pertanyaan",
-      dataIndex: "question",
-      key: "question",
-    },
-    {
-      title: "Materi",
-      dataIndex: "materials_title",
-      key: "materials_title",
-      align: "center" as const,
-    },
-    {
-      title: "Aksi",
-      key: "aksi",
-      align: "center" as const,
-      render: (data: IExcerciseData) => (
-        <Space>
-          <Button
-            type="link"
-            onClick={() => handleSelectItem(data)}
-            icon={<EditOutlined />}
-          />
-          <Button
-            type="link"
-            onClick={() => deleteExcercise(data.id)}
-            danger
-            icon={<DeleteOutlined />}
-          />
-        </Space>
-      ),
-    },
-  ];
-
   return (
     <MainLayout>
       <div className="px-6 py-8 space-y-6">

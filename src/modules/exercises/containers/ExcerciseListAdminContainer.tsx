@@ -12,6 +12,10 @@ import { insertExcercises, fetchExcercises } from "services/excerciseService";
 import { useExcerciseState } from "store/excerciseStore";
 import { IExcerciseData } from "types/materi";
 import ModalExerciseContainer from "./ModalExerciseContainer";
+import { Button, Popconfirm, Space } from "antd";
+import { EditOutlined, DeleteOutlined } from "@ant-design/icons";
+import { deleteExcercise } from "services/excerciseService";
+import dayjs from "dayjs";
 
 const schema = z.object({
   title: z.string().min(1, "Title is required"),
@@ -32,6 +36,7 @@ export default function ExcerciseListAdminContainer() {
   );
   const { excercise, setDefaultValue } = useExcerciseState.getState();
   const [openModal, setOpenModal] = useState(false);
+  console.log("excercise", excercise);
 
   useEffect(() => {
     fetchMaterials();
@@ -112,7 +117,6 @@ export default function ExcerciseListAdminContainer() {
   const currentValues = getValues();
 
   const handleSelectItem = (data: IExcerciseData) => {
-    setDefaultValue(data);
     reset({
       title: data.title,
       material_id: data.material_id,
@@ -121,7 +125,62 @@ export default function ExcerciseListAdminContainer() {
       options: data.options.length ? data.options : ["", ""],
       image: null,
     });
+    setDefaultValue(data);
+    setOpenModal(true);
   };
+
+  const columns = [
+    {
+      title: "Pertanyaan",
+      dataIndex: "question",
+      key: "question",
+    },
+    {
+      title: "Level",
+      dataIndex: "level",
+      key: "level",
+      align: "center" as const,
+    },
+    {
+      title: "Materi",
+      dataIndex: "materials_title",
+      key: "materials_title",
+      align: "center" as const,
+    },
+    {
+      title: "Tanggal Pembuatan",
+      dataIndex: "created_at",
+      key: "created_at",
+      align: "center" as const,
+      render: (value: string) => dayjs(value).format("DD MMM YYYY HH:mm"),
+    },
+    {
+      title: "Aksi",
+      key: "aksi",
+      align: "center" as const,
+      render: (data: IExcerciseData) => (
+        <Space>
+          <Button
+            type="link"
+            onClick={() => handleSelectItem(data)}
+            icon={<EditOutlined />}
+          />
+          <Popconfirm
+            title="Hapus Latihan"
+            description="Apakah kamu yakin ingin menghapus latihan ini?"
+            okText="Ya"
+            cancelText="Tidak"
+            onConfirm={() => deleteExcercise(data.id)}
+            classNames={{
+              root: "custom-popconfirm",
+            }}
+          >
+            <Button type="link" danger icon={<DeleteOutlined />} />
+          </Popconfirm>
+        </Space>
+      ),
+    },
+  ];
 
   return (
     <>
@@ -138,6 +197,7 @@ export default function ExcerciseListAdminContainer() {
         data={excercise}
         handleSelectItem={handleSelectItem}
         setOpenModal={setOpenModal}
+        columns={columns}
       />
       {openModal && (
         <ModalExerciseContainer

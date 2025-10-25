@@ -47,9 +47,7 @@ export default function ModalMaterialContainer(props: IProps) {
   };
 
   const handleUpdateMaterials = async (payload: IMaterialForm) => {
-    console.log("payload", payload);
     if (typeof payload.thumbnail === "string") {
-      console.log("haloo if");
       payload.thumbnail = payload.thumbnail;
       delete payload.thumbnail_file;
     } else {
@@ -57,8 +55,6 @@ export default function ModalMaterialContainer(props: IProps) {
       const file = payload?.thumbnail_file?.file;
       if (file) {
         imgUrl = await uploadImage("thumbnail", file.name, file);
-
-        console.log("imgUrl", imgUrl);
         delete payload.thumbnail_file;
 
         payload.thumbnail = imgUrl?.publicUrl;

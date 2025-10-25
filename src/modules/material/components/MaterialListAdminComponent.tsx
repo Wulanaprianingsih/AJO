@@ -32,7 +32,7 @@ export default function MaterialListAdminComponent(props: IProps) {
         <Table
           columns={columnsTable}
           dataSource={materials ?? []}
-          pagination={{ pageSize: 5 }}
+          pagination={{ pageSize: 10 }}
           rowKey="id"
           bordered
           className="[&_.ant-table-thead>tr>th]:!bg-[#EAD3B3] [&_.ant-table-thead>tr>th]:!text-[#5E331E] 
