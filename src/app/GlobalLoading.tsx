@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, ReactNode } from "react";
+import { ReactNode, useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import { Spin } from "antd";
 
@@ -12,13 +12,11 @@ export default function GlobalLoading({ children }: { children: ReactNode }) {
   useEffect(() => {
     if (pathname !== currentPath) {
       setLoading(true);
-
-      const timeout = setTimeout(() => {
-        setLoading(false);
+      const timer = setTimeout(() => {
         setCurrentPath(pathname);
-      }, 500);
-
-      return () => clearTimeout(timeout);
+        setLoading(false);
+      }, 300);
+      return () => clearTimeout(timer);
     }
   }, [pathname, currentPath]);
 

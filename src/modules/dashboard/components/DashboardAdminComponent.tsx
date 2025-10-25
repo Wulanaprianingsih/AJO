@@ -44,7 +44,7 @@ export default function DashboardAdminComponent(props: IProps) {
             level={3}
             style={{ color: "#5E331E", marginBottom: 0, fontWeight: 700 }}
           >
-            Dashboard Admin
+            Dashboard
           </Title>
         </div>
 

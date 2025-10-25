@@ -48,24 +48,41 @@ export default function ModalMaterialContainer(props: IProps) {
 
   const handleUpdateMaterials = async (payload: IMaterialForm) => {
     console.log("payload", payload);
-    if (typeof payload.thumbnail_file === "string") {
-      payload.thumbnail = payload.thumbnail_file;
+    if (typeof payload.thumbnail === "string") {
+      console.log("haloo if");
+      payload.thumbnail = payload.thumbnail;
       delete payload.thumbnail_file;
     } else {
+      let imgUrl = null;
       const file = payload?.thumbnail_file?.file;
-      if (!file) return;
-      const imgUrl = await uploadImage("thumbnail", file.name, file);
+      if (file) {
+        imgUrl = await uploadImage("thumbnail", file.name, file);
 
-      console.log("imgUrl", imgUrl);
-      delete payload.thumbnail_file;
+        console.log("imgUrl", imgUrl);
+        delete payload.thumbnail_file;
 
-      payload.thumbnail = imgUrl?.publicUrl;
+        payload.thumbnail = imgUrl?.publicUrl;
+      }
     }
+
+    const excludeKeys = [
+      "user_answers",
+      "user_excercise_history",
+      "thumbnail_file",
+      "excercise_history",
+      "excercises",
+      "created_at",
+      "key",
+    ];
+
+    const filteredPayload = Object.fromEntries(
+      Object.entries(payload).filter(([key]) => !excludeKeys.includes(key))
+    );
 
     try {
       const { data, error } = await supabase
         .from("materials")
-        .update(payload)
+        .update(filteredPayload)
         .eq("id", defaultMaterialValue?.id);
       if (error) console.log("error", error);
       else {
