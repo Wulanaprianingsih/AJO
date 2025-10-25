@@ -4,31 +4,12 @@ import React from "react";
 import Image from "next/image";
 import trophyIcon from "assets/icons/reward.png";
 import { useUserStore } from "store/userDataStore";
-
-interface IUser {
-  id: number;
-  name: string;
-  totalpoin: number;
-}
+import { UserProps } from "types/userData";
 
 export default function LeaderboardComponent() {
   const { allUser, userProfile: currentUser } = useUserStore();
 
-  const leaderboard: IUser[] = [
-    { id: 1, name: "Dewi Saraswati", totalpoin: 12500 },
-    { id: 2, name: "Bagus Pratama", totalpoin: 11200 },
-    { id: 3, name: "Rani Kusuma", totalpoin: 10800 },
-    { id: 4, name: "Arif Nugroho", totalpoin: 9750 },
-    { id: 5, name: "Putri Ayu", totalpoin: 9400 },
-    { id: 6, name: "Dimas Wicaksono", totalpoin: 9100 },
-    { id: 7, name: "Intan Maharani", totalpoin: 8800 },
-    { id: 8, name: "Fajar Santoso", totalpoin: 8600 },
-    { id: 9, name: "Larasati", totalpoin: 8400 },
-    { id: 10, name: "Adi Saputra", totalpoin: 8200 },
-    { id: 11, name: "Wulan Aprianingsih", totalpoin: 7900 },
-  ];
-
-  const top10 = allUser.slice(0, 10);
+  const top10 = allUser.filter((x: UserProps) => x.points > 0).slice(0, 10);
   const userRank = allUser.findIndex((u) => u.id === currentUser?.id) + 1;
 
   return (
@@ -114,7 +95,7 @@ export default function LeaderboardComponent() {
               </span>
             </div>
             <p className="text-[#5C3B1E] text-sm mt-2">
-              Kamu berada di peringkat ke-{userRank} dari {leaderboard.length}{" "}
+              Kamu berada di peringkat ke-{userRank} dari {allUser?.length}{" "}
               siswa. Terus semangat supaya bisa masuk 10 besar! 💪
             </p>
           </div>

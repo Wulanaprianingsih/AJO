@@ -142,7 +142,7 @@ export default function ExercisesContainer() {
     <ExercisesComponent
       onSubmit={handleSubmit}
       data={excercises}
-      userAnswers={detailMaterial?.user_answers?.[0].answer}
+      userAnswers={detailMaterial?.user_answers?.[0]?.answer}
     />
   );
 }
