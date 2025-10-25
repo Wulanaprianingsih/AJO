@@ -11,6 +11,7 @@ import { fetchMaterials, uploadImage } from "services/materialService";
 import { insertExcercises, fetchExcercises } from "services/excerciseService";
 import { useExcerciseState } from "store/excerciseStore";
 import { IExcerciseData } from "types/materi";
+import ModalExerciseContainer from "./ModalExerciseContainer";
 
 const schema = z.object({
   title: z.string().min(1, "Title is required"),
@@ -30,6 +31,7 @@ export default function ExcerciseListAdminContainer() {
     []
   );
   const { excercise, setDefaultValue } = useExcerciseState.getState();
+  const [openModal, setOpenModal] = useState(false);
 
   useEffect(() => {
     fetchMaterials();
@@ -101,6 +103,7 @@ export default function ExcerciseListAdminContainer() {
     const _payload = {
       ...payload,
       image_url: imgUrl?.publicUrl,
+      options: data.options.map((opt) => ({ text: opt })),
     };
 
     await insertExcercises([_payload]);
@@ -121,18 +124,27 @@ export default function ExcerciseListAdminContainer() {
   };
 
   return (
-    <ExcerciseListAdminComponent
-      formValues={{ ...currentValues, options }}
-      materiList={materiList}
-      register={register}
-      errors={errors}
-      onAddOption={addOption}
-      onRemoveOption={removeOption}
-      onOptionChange={handleOptionChange}
-      onImageChange={handleImageChange}
-      onSubmit={onSubmit}
-      data={excercise}
-      handleSelectItem={handleSelectItem}
-    />
+    <>
+      <ExcerciseListAdminComponent
+        formValues={{ ...currentValues, options }}
+        materiList={materiList}
+        register={register}
+        errors={errors}
+        onAddOption={addOption}
+        onRemoveOption={removeOption}
+        onOptionChange={handleOptionChange}
+        onImageChange={handleImageChange}
+        onSubmit={onSubmit}
+        data={excercise}
+        handleSelectItem={handleSelectItem}
+        setOpenModal={setOpenModal}
+      />
+      {openModal && (
+        <ModalExerciseContainer
+          setOpenModal={setOpenModal}
+          openModal={openModal}
+        />
+      )}
+    </>
   );
 }

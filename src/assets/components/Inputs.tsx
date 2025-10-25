@@ -4,7 +4,7 @@ import TextArea from "antd/es/input/TextArea";
 import React from "react";
 
 interface InputsProps {
-  label: string;
+  label?: string;
   placeholder: string;
   type?: "text" | "password" | "number" | "textArea";
   value: string | number | undefined;

@@ -15,15 +15,18 @@ interface IExcerciseData {
   created_at: string;
 }
 
+interface IOption {
+  text: string;
+}
+
 interface IExcercisePayload {
   image_url: string | undefined;
   title: string;
   material_id: string;
   question: string;
   answer: string;
-  options: string[];
+  options: IOption[]; 
 }
-
 
 interface IMaterialForm {
   level: string;

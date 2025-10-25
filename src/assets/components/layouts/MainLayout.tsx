@@ -15,6 +15,7 @@ import {
 import { Modal } from "antd";
 import imgLogo from "assets/images/logo.png";
 import { supabase } from "lib/supabaseClient";
+import { useUserStore } from "store/userDataStore";
 
 export default function MainLayout({
   children,
@@ -25,6 +26,8 @@ export default function MainLayout({
   const router = useRouter();
   const [open, setOpen] = useState(false);
   const [logoutModal, setLogoutModal] = useState(false);
+  const userData = useUserStore((s) => s.userProfile);
+  const role = userData?.role;
 
   const menu = [
     { name: "Beranda", path: "/dashboard", icon: <HomeOutlined /> },
@@ -74,43 +77,47 @@ export default function MainLayout({
         </div>
 
         <nav className="flex flex-col gap-3 w-full">
-          {menu.map((item) => {
-            const isActive = pathname.startsWith(item.path);
+          {menu
+            .filter((item) => !(item.name === "Peringkat" && role === "admin"))
+            .map((item) => {
+              const isActive = pathname.startsWith(item.path);
 
-            const handleClick = () => {
-              if (item.name === "Keluar") {
-                setLogoutModal(true);
-              } else {
-                setOpen(false);
-                router.push(item.path);
-              }
-            };
+              const handleClick = () => {
+                if (item.name === "Keluar") {
+                  setLogoutModal(true);
+                } else {
+                  setOpen(false);
+                  router.push(item.path);
+                }
+              };
 
-            return (
-              <button
-                key={item.path}
-                onClick={handleClick}
-                className={`flex items-center gap-3 px-4 py-2 rounded-lg font-medium transition-all w-full text-left ${
-                  isActive
-                    ? "bg-[#E9D4B6] text-[#3A2C1A] shadow-sm"
-                    : "hover:bg-[#7A5633] text-white"
-                }`}
-              >
-                <span className="text-lg">{item.icon}</span>
-                <span>{item.name}</span>
-              </button>
-            );
-          })}
+              return (
+                <button
+                  key={item.path}
+                  onClick={handleClick}
+                  className={`flex items-center gap-3 px-4 py-2 rounded-lg font-medium transition-all w-full text-left ${
+                    isActive
+                      ? "bg-[#E9D4B6] text-[#3A2C1A] shadow-sm"
+                      : "hover:bg-[#7A5633] text-white"
+                  }`}
+                >
+                  <span className="text-lg">{item.icon}</span>
+                  <span>{item.name}</span>
+                </button>
+              );
+            })}
         </nav>
 
         <div className="mt-auto text-xs opacity-80 pt-4">©2025</div>
       </aside>
+
       {open && (
         <div
           onClick={() => setOpen(false)}
           className="fixed inset-0 bg-black/40 md:hidden z-40"
         />
       )}
+
       <main className="flex-1 p-4 md:px-8 md:py-6 w-full">
         <button
           onClick={() => setOpen(true)}
@@ -120,6 +127,7 @@ export default function MainLayout({
         </button>
         {children}
       </main>
+
       <Modal
         title={
           <p className="text-[#5E331E] font-semibold">Konfirmasi Keluar</p>
