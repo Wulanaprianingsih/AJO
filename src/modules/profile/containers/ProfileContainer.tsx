@@ -10,6 +10,11 @@ export default function ProfilContainer() {
     <ProfileComponent
       nama={userData?.nama ?? ""}
       email={userData?.email ?? ""}
+      role={userData?.role ?? ""}
+      id={userData?.id ?? ""}
+      points={userData?.points ?? 0}
+      user_badges={userData?.user_badges ?? []}
+      level={userData?.level ?? 1}
     />
   );
 }
