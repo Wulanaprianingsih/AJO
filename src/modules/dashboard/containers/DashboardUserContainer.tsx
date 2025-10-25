@@ -10,7 +10,7 @@ export default function DashboardUserContainer() {
 
   const dashboardData = {
     point: userData?.points ?? 0,
-    badge: userData?.user_badges?.[0].name ?? "",
+    badge: userData?.user_badges?.[0]?.name ?? "",
     level: userData?.level ?? 1,
   };
 

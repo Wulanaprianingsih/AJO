@@ -5,7 +5,6 @@ import MaterialListComponent from "../components/MaterialListComponent";
 import { useRouter } from "next/navigation";
 import { useMaterialState } from "store/materialStore";
 import { fetchMaterials } from "services/materialService";
-import { useUserStore } from "store/userDataStore";
 
 const dummyUserData = {
   scores: {
@@ -17,12 +16,12 @@ const dummyUserData = {
 
 export default function MaterialListContainer() {
   const router = useRouter();
-  const materials = useMaterialState((state) => state.materials)
+  const materials = useMaterialState((state) => state.materials);
 
   useEffect(() => {
-    fetchMaterials()
-  }, [])
- 
+    fetchMaterials();
+  }, []);
+
   const formatted = materials.map((x) => ({
     title: x.title,
     description: x.description,
@@ -30,32 +29,31 @@ export default function MaterialListContainer() {
     level: x.level,
     id: x.id,
     excercise_history: x.excercise_history,
-    last_point: x.excercise_history?.[0]?.point ?? 0
-  }))
-  
-  console.log('materials', materials)
+    last_point: x.excercise_history?.[0]?.point ?? 0,
+  }));
+
+  console.log("materials", materials);
 
   const LevelList = [
     {
-      "levelTitle": "Level 1 – Dasar Basa (Pemula)",
-      "description": "Mulai perjalananmu mengenal Bahasa Jawa dari kosakata sehari-hari, sapaan, dan ungkapan sopan. Selesaikan level ini untuk bisa berkomunikasi sederhana dengan percaya diri!",
-      "materi": formatted.filter((m) => m.level == '1')
+      levelTitle: "Level 1 – Dasar Basa (Pemula)",
+      description:
+        "Mulai perjalananmu mengenal Bahasa Jawa dari kosakata sehari-hari, sapaan, dan ungkapan sopan. Selesaikan level ini untuk bisa berkomunikasi sederhana dengan percaya diri!",
+      materi: formatted.filter((m) => m.level == "1"),
     },
     {
-      "levelTitle": "Level 2 – Aksara dan Adat (Menengah)",
-      "description":
+      levelTitle: "Level 2 – Aksara dan Adat (Menengah)",
+      description:
         "Belajar aksara Jawa, memahami budaya melalui kata, serta mencoba ungkapan sopan yang lebih kompleks. Tantang dirimu untuk bisa menguasainya!",
-      "materi": formatted.filter((m) => m.level == '2')
+      materi: formatted.filter((m) => m.level == "2"),
     },
     {
-      "levelTitle": "Level 3 – Luhur dan Budaya (Mahir)",
-      "description":
-      "Kuasi Bahasa Jawa tingkat mahir: komunikasi formal, paribasan, tembang macapat, dan nilai-nilai luhur. Saatnya menciptakan kalimatmu sendiri dan merasakan kekayaan budaya Jawa!",
-      "materi": formatted.filter((m) => m.level == '3')
-    }
-  ] 
-
-
+      levelTitle: "Level 3 – Luhur dan Budaya (Mahir)",
+      description:
+        "Kuasi Bahasa Jawa tingkat mahir: komunikasi formal, paribasan, tembang macapat, dan nilai-nilai luhur. Saatnya menciptakan kalimatmu sendiri dan merasakan kekayaan budaya Jawa!",
+      materi: formatted.filter((m) => m.level == "3"),
+    },
+  ];
 
   const [userData] = useState<{ scores: Record<string, number> } | undefined>(
     dummyUserData

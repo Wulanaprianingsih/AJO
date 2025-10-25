@@ -36,8 +36,8 @@ export default function ModalMaterialSampleComponent({
   const methods = useForm<IMaterialForm>({
     mode: "onChange",
     defaultValues: {
-      level: undefined,
-      sequence: undefined,
+      level: "0",
+      sequence: 0,
       title: "",
       description: "",
       media_type: "video",
@@ -52,7 +52,6 @@ export default function ModalMaterialSampleComponent({
   });
 
   const { control, reset, handleSubmit, watch, setValue } = methods;
-  console.log("defaultValue", defaultValue);
 
   useEffect(() => {
     if (defaultValue) {
