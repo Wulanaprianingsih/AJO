@@ -1,5 +1,5 @@
-import DashboardContainer from "modules/dashboard/containers/DashboardUserContainer";
+import LoginContainer from "modules/auth/containers/LoginContainer";
 
 export default function Home() {
-  return <DashboardContainer />;
+  return <LoginContainer />;
 }
