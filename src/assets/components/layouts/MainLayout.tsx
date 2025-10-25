@@ -11,7 +11,6 @@ import {
   TrophyOutlined,
   UserOutlined,
   LogoutOutlined,
-  EditOutlined,
 } from "@ant-design/icons";
 import { Modal, Spin } from "antd";
 import imgLogo from "assets/images/logo.png";
@@ -31,10 +30,9 @@ export default function MainLayout({
 
   const menu = [
     { name: "Dashboard", path: "/dashboard", icon: <HomeOutlined /> },
-    { name: "Materi", path: "/material", icon: <ReadOutlined /> },
-    { name: "Latihan", path: "/exercises", icon: <EditOutlined /> },
-    { name: "Peringkat", path: "/leaderboard", icon: <TrophyOutlined /> },
-    { name: "Profil", path: "/profile", icon: <UserOutlined /> },
+    { name: "Belajar", path: "/belajar", icon: <ReadOutlined /> },
+    { name: "Peringkat", path: "/peringkat", icon: <TrophyOutlined /> },
+    { name: "Profil", path: "/profil", icon: <UserOutlined /> },
     { name: "Keluar", path: "/logout", icon: <LogoutOutlined /> },
   ];
 

@@ -61,7 +61,7 @@ export default function MaterialListContainer() {
   const [openLevel, setOpenLevel] = useState<number | null>(null);
 
   const handleNavigate = (materi: { title: string; id: number }) => {
-    router.push(`/material/${materi.id}`); //nanti diganti id
+    router.push(`/belajar/${materi.id}`);
   };
 
   return (

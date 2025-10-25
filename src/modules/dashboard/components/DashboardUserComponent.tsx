@@ -12,7 +12,6 @@ import aksaraIcon from "assets/images/aksara-jawa.png";
 import levelIcon from "assets/icons/level_up.png";
 import pointIcon from "assets/icons/point.png";
 
-
 interface IProps {
   role: string | undefined;
   badgeImg: string | undefined;
@@ -95,10 +94,7 @@ export default function DashboardUserComponent(props: IProps) {
                   <h2 className="text-2xl font-bold text-green-800">
                     {dashboardData?.level}
                   </h2>
-                  <p className="text-sm text-[#5E331E] font-medium">
-                    Bocah Wicara
-                  </p>
-                  <p className="text-xs text-gray-500 mt-1">Level</p>
+                  <p className="text-sm text-[#5E331E] font-medium">Level</p>
                 </div>
               </Card>
             </Col>
@@ -120,7 +116,7 @@ export default function DashboardUserComponent(props: IProps) {
                     width={28}
                     height={28}
                     className="mb-1"
-                    loading="lazy" 
+                    loading="lazy"
                   />
                   <h2 className="text-2xl font-bold text-yellow-700">
                     {dashboardData?.point}
@@ -151,7 +147,6 @@ export default function DashboardUserComponent(props: IProps) {
                       height={40}
                       className="mb-1"
                     />
-                    
                   )}
                   <h2 className="text-base font-semibold text-orange-700">
                     {dashboardData?.badge}

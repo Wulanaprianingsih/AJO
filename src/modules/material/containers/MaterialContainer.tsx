@@ -19,7 +19,7 @@ export default function MaterialContainer() {
     (x) => x.id.toString() == materiId?.toString()
   );
   const handleNavigate = () => {
-    router.push(`/exercises/${materiId}`);
+    router.push(`/latihan/${materiId}`);
   };
 
   useEffect(() => {
