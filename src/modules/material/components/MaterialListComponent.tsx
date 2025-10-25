@@ -34,7 +34,6 @@ interface IProps {
 }
 
 export default function MaterialListComponent({
-  userData,
   onNavigate,
   openLevel,
   setOpenLevel,
@@ -44,13 +43,6 @@ export default function MaterialListComponent({
 
   const levelIcons = [level1, level2, level3];
 
-  const isLevelUnlocked = (levelIndex: number) => {
-    if (levelIndex === 0) return true;
-    const prevLevelMateri = levels[levelIndex - 1].materi;
-    return prevLevelMateri.every(
-      (m) => (userData?.scores[m.title] ?? 0) >= KKM
-    );
-  };
   return (
     <MainLayout>
       <div className="px-4 md:px-8 pb-10">
@@ -63,8 +55,9 @@ export default function MaterialListComponent({
 
         <div className="mt-6 space-y-6">
           {levels.map((level: IMateriLevel, idx) => {
-            // const unlocked = idx === 0 || levels[idx - 1].materi.every((x) => x.last_point >= KKM)
-            const unlocked = isLevelUnlocked(idx);
+            const unlocked =
+              idx === 0 ||
+              levels[idx - 1].materi.every((x) => x.last_point >= KKM);
             return (
               <div
                 key={idx}

@@ -53,7 +53,7 @@ export interface IDetailCourse {
 export interface IQuiz {
   question: string;       
   options: string[];      
-  correctAnswer: string; 
+  answer: string; 
 }
 
 

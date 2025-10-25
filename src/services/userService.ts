@@ -7,6 +7,9 @@ export const fetchAllUser = async () => {
     const { data: users, error } = await supabase
         .from("users")
         .select("*")
+        .eq('role', 'user')
+        .order('points', {ascending: false});
+
     if (error) {
         console.error("error fetch materials:", error)
         return []
@@ -15,11 +18,22 @@ export const fetchAllUser = async () => {
     }
 }
 
-export const updateUserPoint = async (point: number, userId: string) => {
+interface IUpdateUserPayload {
+    points: number
+    level?: number
+    email?: string
+}
+export const updateUserPoint = async (props: IUpdateUserPayload) => {
+    const {points, email, level} = props
+    console.log('props', props)
+
+    const payload: IUpdateUserPayload = {points: points}
+    if(level && level > 0) payload.level = level 
+    
     const { error } = await supabase
         .from("users")
-        .update({ points: point })
-        .eq('id', userId)
+        .update(payload)
+        .eq('email', email)
     if (error) throw error
 }
 

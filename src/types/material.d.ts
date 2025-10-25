@@ -4,19 +4,20 @@ interface ISampleQuiz {
   answer: string;
 }
 
+interface IOptions {
+  
+    text: string
+}
+
 interface IExcerciseData {
   image_url: string | undefined;
   title: string;
   material_id: string;
   question: string;
   answer: string;
-  options: string[];
+  options: IOptions[]
   id: number
   created_at: string;
-}
-
-interface IOption {
-  text: string;
 }
 
 interface IExcercisePayload {
@@ -25,8 +26,9 @@ interface IExcercisePayload {
   material_id: string;
   question: string;
   answer: string;
-  options: IOption[]; 
+  options: string[];
 }
+
 
 interface IMaterialForm {
   level: string;

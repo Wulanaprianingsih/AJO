@@ -11,10 +11,11 @@ import historyIcon from "assets/icons/history.png";
 import aksaraIcon from "assets/images/aksara-jawa.png";
 import levelIcon from "assets/icons/level_up.png";
 import pointIcon from "assets/icons/point.png";
-import badgeIcon from "assets/images/badge_aksara.png";
+
 
 interface IProps {
   role: string | undefined;
+  badgeImg: string | undefined;
   dashboardData:
     | {
         point: number;
@@ -25,7 +26,7 @@ interface IProps {
 }
 
 export default function DashboardUserComponent(props: IProps) {
-  const { dashboardData } = props;
+  const { dashboardData, badgeImg } = props;
 
   return (
     <MainLayout>
@@ -119,6 +120,7 @@ export default function DashboardUserComponent(props: IProps) {
                     width={28}
                     height={28}
                     className="mb-1"
+                    loading="lazy" 
                   />
                   <h2 className="text-2xl font-bold text-yellow-700">
                     {dashboardData?.point}
@@ -141,13 +143,16 @@ export default function DashboardUserComponent(props: IProps) {
                 }}
               >
                 <div className="flex flex-col items-center justify-center">
-                  <Image
-                    src={badgeIcon}
-                    alt="Badge"
-                    width={40}
-                    height={40}
-                    className="mb-1"
-                  />
+                  {badgeImg && (
+                    <Image
+                      src={badgeImg}
+                      alt="Badge"
+                      width={40}
+                      height={40}
+                      className="mb-1"
+                    />
+                    
+                  )}
                   <h2 className="text-base font-semibold text-orange-700">
                     {dashboardData?.badge}
                   </h2>

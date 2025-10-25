@@ -3,6 +3,7 @@ import MainLayout from "assets/components/layouts/MainLayout";
 import React from "react";
 import Image from "next/image";
 import trophyIcon from "assets/icons/reward.png";
+import { useUserStore } from "store/userDataStore";
 
 interface IUser {
   id: number;
@@ -11,6 +12,8 @@ interface IUser {
 }
 
 export default function LeaderboardComponent() {
+  const { allUser, userProfile: currentUser } = useUserStore();
+
   const leaderboard: IUser[] = [
     { id: 1, name: "Dewi Saraswati", totalpoin: 12500 },
     { id: 2, name: "Bagus Pratama", totalpoin: 11200 },
@@ -25,15 +28,8 @@ export default function LeaderboardComponent() {
     { id: 11, name: "Wulan Aprianingsih", totalpoin: 7900 },
   ];
 
-  const currentUser: IUser = {
-    id: 11,
-    name: "Wulan Aprianingsih",
-    totalpoin: 7900,
-  };
-
-  const sorted = leaderboard.sort((a, b) => b.totalpoin - a.totalpoin);
-  const top10 = sorted.slice(0, 10);
-  const userRank = sorted.findIndex((u) => u.id === currentUser.id) + 1;
+  const top10 = allUser.slice(0, 10);
+  const userRank = allUser.findIndex((u) => u.id === currentUser?.id) + 1;
 
   return (
     <MainLayout>
@@ -62,7 +58,7 @@ export default function LeaderboardComponent() {
             </thead>
             <tbody>
               {top10.map((user, index) => {
-                const isCurrent = user.id === currentUser.id;
+                const isCurrent = user.id === currentUser?.id;
                 const medal =
                   index === 0
                     ? "🥇"
@@ -89,10 +85,10 @@ export default function LeaderboardComponent() {
                           : "text-[#5E331E]"
                       }`}
                     >
-                      {user.name}
+                      {user.nama}
                     </td>
                     <td className="py-3 px-6 text-right text-[#5E331E] font-medium whitespace-nowrap">
-                      {user.totalpoin.toLocaleString()}
+                      {user.points.toLocaleString()}
                     </td>
                   </tr>
                 );
@@ -111,10 +107,10 @@ export default function LeaderboardComponent() {
             </h3>
             <div className="flex justify-between items-center">
               <span className="text-[#5E331E] font-medium">
-                #{userRank} - {currentUser.name}
+                #{userRank} - {currentUser?.nama}
               </span>
               <span className="text-[#5E331E] font-semibold">
-                {currentUser.totalpoin.toLocaleString()}
+                {currentUser?.points.toLocaleString()}
               </span>
             </div>
             <p className="text-[#5C3B1E] text-sm mt-2">

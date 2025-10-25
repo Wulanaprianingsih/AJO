@@ -27,7 +27,7 @@ export default function MaterialComponent({
   const handleOptionSelect = (value: string) => {
     setSelectedOption(value);
     setIsAnswered(true);
-    setIsCorrect(value === course.quiz?.correctAnswer);
+    setIsCorrect(value === course.quiz?.answer);
   };
 
   return (
@@ -122,7 +122,7 @@ export default function MaterialComponent({
             >
               {isCorrect
                 ? "✅ Jawaban kamu benar!"
-                : `❌ Jawaban kamu salah. Yang benar adalah "${course.quiz?.correctAnswer}".`}
+                : `❌ Jawaban kamu salah. Yang benar adalah "${course.quiz?.answer}".`}
             </p>
           )}
         </Card>

@@ -108,3 +108,18 @@ export const insertUserBadge = async (paylaod: IBagdePayload[]) => {
         .select()
     if (error) throw error
 }
+
+interface IUserAnswersPayload {
+    user_id: string
+    answer: Record<number, string>,
+    material_id: number
+}
+
+export const insertUserAnswers = async (paylaod: IUserAnswersPayload) => {
+    const { error } = await supabase
+        .from('user_answers')
+        .insert(paylaod)
+        .select()
+    if (error) throw error
+}
+

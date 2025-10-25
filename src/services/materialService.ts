@@ -1,28 +1,80 @@
 import { supabase } from "lib/supabaseClient"
 import { useMaterialState } from "store/materialStore"
-import { IExcerciseHistory } from "types/material"
+import { IExcerciseHistory, IExcerciseData } from "types/material"
 
-export const fetchMaterials = async () => {
+interface IOptionsQuiz {
+    text: string
+}
+
+export const fetchMaterials = async (id?: number) => {
     const setMaterial = useMaterialState.getState().setMaterials
 
-    const { data: materials, error } = await supabase
+    const fetchAll = async() => {
+        const { data: materials, error } = await supabase
         .from("materials")
-        .select("*, excercises ( * ), user_excercise_history ( * ) ")
+        .select("*, excercises ( * ), user_excercise_history ( * ), user_answers ( * ) ")
 
-    if (error) {
-        console.error("error fetch materials:", error)
-        return
+        if (error) {
+            console.error("error fetch materials:", error)
+            throw error
+        }
+    
+        return materials
     }
 
+    const fetchById = async() => {
+        const { data: materials, error } = await supabase
+        .from("materials")
+        .select("*, excercises ( * ), user_excercise_history ( * ) ")
+        .eq('id', id)
 
-    const modifiedMaterials = materials.map((m, i) => ({
-        ...m,
-        key: i,
-        excercise_history: m.user_excercise_history?.sort(
-            (a: IExcerciseHistory, b: IExcerciseHistory) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
-        ),
-    }))
+        if (error) {
+            console.error("error fetch materials:", error)
+            throw error
+        }
+    
+        return materials
+    }
 
+    const materials = id ? await fetchById() : await fetchAll()
+    
+    const getAnswerIndex = (answer: string) => {
+        const answers = ['a', 'b', 'c', 'd'];
+        return answers.indexOf(answer.toLowerCase());
+    }
+
+    const modifiedMaterials = materials.map((m, i) => {
+        const excercise_history = m.user_excercise_history?.sort(
+          (a: IExcerciseHistory, b: IExcerciseHistory) =>
+            new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+        );
+      
+        const options = m.sample_quiz.options.map((x: IOptionsQuiz) => x.text);
+        const indexOfAnswer = getAnswerIndex(m.sample_quiz.answer)
+      
+        return {
+          ...m,
+          key: i,
+          excercise_history,
+          sample_quiz: {
+            question: m.sample_quiz.question,
+            options,
+            answer: options[indexOfAnswer]
+          },
+          excercises: m.excercises.map((ex: IExcerciseData) => {
+            const exOptions = ex.options.map((x: { text: string }) => x.text);
+            const exAnswerIndex = getAnswerIndex(ex.answer);
+      
+            return {
+              ...ex,
+              question: ex.question,
+              options: exOptions,
+              answer: exOptions[exAnswerIndex] ?? null,
+            };
+          }),
+        };
+      });
+      
     setMaterial(modifiedMaterials)
 }
 

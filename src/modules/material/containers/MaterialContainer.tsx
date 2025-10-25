@@ -1,11 +1,12 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import MaterialComponent from "../components/MaterialComponent";
 // import { useCourseStore } from "store/courseStore";
 import { useRouter, useParams } from "next/navigation";
 import { IDetailCourse } from "types/course";
 import { useMaterialState } from "store/materialStore";
+import { fetchMaterials } from "services/materialService";
 
 export default function MaterialContainer() {
   const material = useMaterialState((s) => s.materials);
@@ -20,9 +21,18 @@ export default function MaterialContainer() {
     router.push(`/exercises/${materiId}`);
   };
 
-  console.log('detailMaterial', detailMaterial)
+  useEffect(() => {
+    const loadMaterial = async () => {
+      if (!detailMaterial) {
+        await fetchMaterials(Number(materiId));
+      }
+    };
+  
+    loadMaterial();
+  }, [detailMaterial, materiId]);
 
-  const dummyCourse: IDetailCourse = {
+
+  const course: IDetailCourse = {
     id: Number(detailMaterial?.id),
     title: detailMaterial?.title ?? '',
     description: detailMaterial?.description ?? '',
@@ -32,13 +42,13 @@ export default function MaterialContainer() {
     quiz: {
       question: detailMaterial?.sample_quiz.question ?? '',
       options: detailMaterial?.sample_quiz.options ?? [''],
-      correctAnswer: detailMaterial?.sample_quiz.answer ?? ''
+      answer: detailMaterial?.sample_quiz.answer ?? ''
     },
   };
 
   return (
     <MaterialComponent
-      course={dummyCourse}
+      course={course}
       handleNavigate={handleNavigate}
       selectedOption={selectedOption}
       setSelectedOption={setSelectedOption}

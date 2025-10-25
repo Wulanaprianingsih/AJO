@@ -103,7 +103,7 @@ export default function ExcerciseListAdminContainer() {
     const _payload = {
       ...payload,
       image_url: imgUrl?.publicUrl,
-      options: data.options.map((opt) => ({ text: opt })),
+      options: data.options,
     };
 
     await insertExcercises([_payload]);
