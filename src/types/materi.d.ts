@@ -10,7 +10,7 @@ interface IExcerciseData {
   material_id: string;
   question: string;
   answer: string;
-  options: string[];
+  options: { text: string }[];
   id: number
   created_at: string;
 }

@@ -1,7 +1,6 @@
 import { supabase } from "lib/supabaseClient";
 import { useExcerciseState } from "store/excerciseStore";
-import { ISubmitExcercise } from "types/course";
-import { IExcercisePayload } from "types/materi";
+import { IExcercisePayload, ISubmitExcercise } from "types/course";
 
 export const fetchExcercises = async () => {
   const setExcercise = useExcerciseState.getState().setExcercise;

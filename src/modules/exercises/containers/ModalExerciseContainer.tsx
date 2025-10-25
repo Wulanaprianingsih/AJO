@@ -7,6 +7,7 @@ import { insertExcercises } from "services/excerciseService";
 import { uploadImage } from "services/materialService";
 import { useMaterialState } from "store/materialStore";
 import { IExcercisePayload } from "types/course";
+import { useExcerciseState } from "store/excerciseStore";
 
 interface IProps {
   openModal: boolean;
@@ -18,6 +19,7 @@ export default function ModalExerciseContainer({
   setOpenModal,
 }: IProps) {
   const materials = useMaterialState((state) => state.materials);
+  const { selectedExcercise } = useExcerciseState.getState();
 
   const materiList = materials.map((m) => ({
     id: String(m.id),
@@ -62,7 +64,7 @@ export default function ModalExerciseContainer({
       onSubmit={handleSubmit}
       handleUpdate={handleSubmit}
       materiList={materiList}
-      defaultValue={null}
+      defaultValue={selectedExcercise}
     />
   );
 }

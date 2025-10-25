@@ -8,6 +8,7 @@ import Inputs from "assets/components/Inputs";
 import Select from "assets/components/Select";
 import Image from "next/image";
 import QuizForm from "./QuizForm";
+import { IExcerciseData } from "types/materi";
 
 interface IMateri {
   id: string;
@@ -32,7 +33,7 @@ interface IProps {
   onSubmit: (data: IExerciseForm) => void;
   handleUpdate: (data: IExerciseForm) => void;
   materiList: IMateri[];
-  defaultValue: IExerciseForm | null;
+  defaultValue: IExcerciseData | null;
 }
 
 export default function ModalExerciseComponent({
@@ -63,12 +64,12 @@ export default function ModalExerciseComponent({
       reset({
         ...defaultValue,
         quiz: {
-          question: defaultValue.quiz?.question || "",
+          question: defaultValue?.question || "",
           options:
-            defaultValue.quiz?.options?.length === 4
-              ? defaultValue.quiz.options
+            defaultValue?.options?.length === 4
+              ? defaultValue.options
               : ["", "", "", ""].map((text) => ({ text })),
-          answer: defaultValue.quiz?.answer || "",
+          answer: defaultValue?.answer || "",
         },
       });
     } else {
@@ -92,8 +93,6 @@ export default function ModalExerciseComponent({
       ...values,
       image_file: values.image_file || undefined,
     };
-    console.log("payload", payload);
-
     if (defaultValue) handleUpdate(payload);
     else onSubmit(payload);
 

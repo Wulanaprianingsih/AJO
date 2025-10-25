@@ -1,8 +1,8 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
-import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
+// import { z } from "zod";
+// import { zodResolver } from "@hookform/resolvers/zod";
 import ExcerciseListAdminComponent, {
   QuestionFormValues,
 } from "../components/ExcerciseListAdminComponent";
@@ -17,26 +17,25 @@ import { EditOutlined, DeleteOutlined } from "@ant-design/icons";
 import { deleteExcercise } from "services/excerciseService";
 import dayjs from "dayjs";
 
-const schema = z.object({
-  title: z.string().min(1, "Title is required"),
-  material_id: z.string().min(1, "Please select a materi"),
-  question: z.string().min(1, "Question is required"),
-  answer: z.string().min(1, "Answer is required"),
-  options: z
-    .array(z.string().min(1, "Option cannot be empty"))
-    .min(2, "At least two options required"),
-  image: z.any().nullable(),
-});
+// const schema = z.object({
+//   title: z.string().min(1, "Title is required"),
+//   material_id: z.string().min(1, "Please select a materi"),
+//   question: z.string().min(1, "Question is required"),
+//   answer: z.string().min(1, "Answer is required"),
+// options: z
+//   .array(z.string().min(1, "Option cannot be empty"))
+//   .min(2, "At least two options required"),
+//   image: z.any().nullable(),
+// });
 
 export default function ExcerciseListAdminContainer() {
-  const [options, setOptions] = useState<string[]>(["", ""]);
+  // const [options, setOptions] = useState<string[]>(["", ""]);
   const materials = useMaterialState((state) => state.materials);
   const [materiList, setMateriList] = useState<{ id: number; title: string }[]>(
     []
   );
   const { excercise, setDefaultValue } = useExcerciseState.getState();
   const [openModal, setOpenModal] = useState(false);
-  console.log("excercise", excercise);
 
   useEffect(() => {
     fetchMaterials();
@@ -62,35 +61,29 @@ export default function ExcerciseListAdminContainer() {
     formState: { errors },
     reset,
   } = useForm<QuestionFormValues>({
-    resolver: zodResolver(schema),
+    // resolver: zodResolver(schema),
     defaultValues: {
       title: "",
       material_id: "",
       question: "",
       answer: "",
-      options: ["", "", "", ""],
+      options: [],
       image: null,
     },
   });
 
-  const handleOptionChange = (index: number, value: string) => {
-    const updated = [...options];
-    updated[index] = value;
-    setOptions(updated);
-    setValue("options", updated);
-  };
+  // const handleOptionChange = (index: number, value: string) => {
+  //   const updated = [...options];
+  //   updated[index] = value;
+  //   setOptions(updated);
+  //   setValue("options", updated);
+  // };
 
-  const addOption = () => {
-    const updated = [...options, ""];
-    setOptions(updated);
-    setValue("options", updated);
-  };
-
-  const removeOption = (index: number) => {
-    const updated = options.filter((_, i) => i !== index);
-    setOptions(updated);
-    setValue("options", updated);
-  };
+  // const addOption = () => {
+  //   const updated = [...options, ""];
+  //   setOptions(updated);
+  //   setValue("options", updated);
+  // };
 
   const handleImageChange = (file: File | null) => {
     setValue("image", file);
@@ -122,7 +115,7 @@ export default function ExcerciseListAdminContainer() {
       material_id: data.material_id,
       question: data.question,
       answer: data.answer,
-      options: data.options.length ? data.options : ["", ""],
+      options: data.options,
       image: null,
     });
     setDefaultValue(data);
@@ -185,13 +178,10 @@ export default function ExcerciseListAdminContainer() {
   return (
     <>
       <ExcerciseListAdminComponent
-        formValues={{ ...currentValues, options }}
+        formValues={{ ...currentValues }}
         materiList={materiList}
         register={register}
         errors={errors}
-        onAddOption={addOption}
-        onRemoveOption={removeOption}
-        onOptionChange={handleOptionChange}
         onImageChange={handleImageChange}
         onSubmit={onSubmit}
         data={excercise}

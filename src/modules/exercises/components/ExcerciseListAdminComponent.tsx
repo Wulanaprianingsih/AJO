@@ -10,7 +10,7 @@ export type QuestionFormValues = {
   material_id: string;
   question: string;
   answer: string;
-  options: string[];
+  options: { text: string }[];
   image: File | null;
 };
 
@@ -20,9 +20,6 @@ type Props = {
   materiList: { id: number; title: string }[];
   register: UseFormRegister<QuestionFormValues>;
   errors: FieldErrors<QuestionFormValues>;
-  onAddOption: () => void;
-  onRemoveOption: (index: number) => void;
-  onOptionChange: (index: number, value: string) => void;
   onImageChange: (file: File | null) => void;
   onSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
   handleSelectItem: (data: IExcerciseData) => void;
