@@ -63,10 +63,7 @@ export default function ModalMaterialSampleComponent({
             defaultValue.sample_quiz?.options?.length === 4
               ? defaultValue.sample_quiz.options
               : ["", "", "", ""],
-          answer:
-            defaultValue.sample_quiz.correctAnswer !== undefined
-              ? defaultValue.sample_quiz.correctAnswer
-              : undefined,
+          answer: defaultValue.sample_quiz.answer || undefined,
         },
       });
     } else {

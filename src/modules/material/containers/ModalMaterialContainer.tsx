@@ -63,7 +63,6 @@ export default function ModalMaterialContainer(props: IProps) {
     }
 
     try {
-      console.log("submit");
       const { data, error } = await supabase
         .from("materials")
         .update(payload)

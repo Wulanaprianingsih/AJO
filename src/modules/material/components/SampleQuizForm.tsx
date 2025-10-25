@@ -50,14 +50,10 @@ export default function SampleQuizForm() {
         className="mb-3"
       />
       <Controller
-        name="sample_quiz.correctAnswer"
+        name="sample_quiz.answer"
         control={control}
         render={({ field }) => (
-          <Radio.Group
-            {...field}
-            value={field.value || undefined}
-            className="w-full"
-          >
+          <Radio.Group {...field} value={field.value} className="w-full">
             {fields.map((item, index) => (
               <div
                 key={item.id || index}
