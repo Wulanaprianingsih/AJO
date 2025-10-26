@@ -38,10 +38,11 @@ export function RegisterContainer() {
       ]);
 
       if (insertError) throw new Error(insertError.message);
-      toast.success("Register berhasil", {
-        position: "top-right",
-      });
       router.push("/auth/login");
+      toast.success("Register berhasil. Silahkan lakukan konfirmasi email!", {
+        position: "top-right",
+        autoClose: false,
+      });
     } catch (err) {
       if (err instanceof Error) {
         toast.error(`Register gagal: ${+err.message}`, {
