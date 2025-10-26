@@ -13,6 +13,7 @@ export const fetchMaterials = async (id?: number) => {
         const { data: materials, error } = await supabase
         .from("materials")
         .select("*, excercises ( * ), user_excercise_history ( * ), user_answers ( * ) ")
+        .order('sequence')
 
         if (error) {
             console.error("error fetch materials:", error)
