@@ -3,7 +3,7 @@ import MainLayout from "assets/components/layouts/MainLayout";
 import React, { Dispatch, SetStateAction, useState } from "react";
 import { IDetailCourse } from "types/course";
 import EmptyMaterial from "./EmptyMaterial";
-import Image from "next/image";
+import Image, { ImageLoaderProps } from "next/image";
 import { Button, Radio, Card } from "antd";
 
 interface IProps {
@@ -40,7 +40,8 @@ export default function MaterialComponent({
     }
     return url;
   };
-  console.log("course", course);
+
+  const externalLoader = ({ src }: ImageLoaderProps) => src;
 
   return (
     <MainLayout>
@@ -66,10 +67,12 @@ export default function MaterialComponent({
             ) : (
               <div className="relative w-full max-w-3xl h-[350px] rounded-2xl overflow-hidden shadow-md">
                 <Image
+                  loader={externalLoader}
                   src={course.media_url}
                   alt={course.title}
-                  fill
-                  className="object-cover"
+                  className="rounded-2xl shadow-md object-cover"
+                  width={700}
+                  height={700}
                 />
               </div>
             )}

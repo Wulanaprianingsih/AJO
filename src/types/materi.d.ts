@@ -37,7 +37,11 @@ interface IMaterialForm {
   media_type: "video" | "image";
   media_url?: string;
   content_text: string;
-  sample_quiz: ISampleQuiz;
+  sample_quiz: {
+    question: string;
+    options: { text: string }[];
+    answer: string;
+  };
 }
 
 interface IMaterialData {

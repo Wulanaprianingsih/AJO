@@ -109,6 +109,7 @@ export default function MainLayout({
                 cancelText="Tidak"
                 onConfirm={handleLogout}
                 classNames={{ root: "custom-popconfirm" }}
+                key="popup-logout"
               >
                 <button
                   key={item.path}

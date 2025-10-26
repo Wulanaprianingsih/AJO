@@ -33,28 +33,28 @@ export default function MaterialListContainer() {
     id: x.id,
     excercise_history: x.excercise_history,
     last_point: x.excercise_history?.[0]?.point ?? 0,
-    thumbnail: x.thumbnail ?? '',
+    thumbnail: x.thumbnail ?? "",
   }));
 
   console.log("materials", materials);
 
   const LevelList = [
     {
-      levelTitle: "Level 1 – Dasar Basa (Pemula)",
+      levelTitle: "Level 1 – Dasar Basa & Aksara (Pemula)",
       description:
-        "Mulai perjalananmu mengenal Bahasa Jawa dari kosakata sehari-hari, sapaan, dan ungkapan sopan. Selesaikan level ini untuk bisa berkomunikasi sederhana dengan percaya diri!",
+        "Mulai perjalananmu mengenal dasar bahasa dan aksara Jawa. Selesaikan level ini untuk bisa berkomunikasi sederhana dengan percaya diri!",
       materi: formatted.filter((m) => m.level == "1"),
     },
     {
-      levelTitle: "Level 2 – Aksara dan Adat (Menengah)",
+      levelTitle: "Level 2 – Unggah-Ungguh Basa (Menengah)",
       description:
-        "Belajar aksara Jawa, memahami budaya melalui kata, serta mencoba ungkapan sopan yang lebih kompleks. Tantang dirimu untuk bisa menguasainya!",
+        "Belajar menggunakan bahasa Jawa dengan unggah-ungguh yang tepat dan memperluas kosakata. Tantang dirimu untuk bisa menguasainya!",
       materi: formatted.filter((m) => m.level == "2"),
     },
     {
-      levelTitle: "Level 3 – Luhur dan Budaya (Mahir)",
+      levelTitle: "Level 3 – Budaya & Sastra Jawa Ringan (Mahir)",
       description:
-        "Kuasi Bahasa Jawa tingkat mahir: komunikasi formal, paribasan, tembang macapat, dan nilai-nilai luhur. Saatnya menciptakan kalimatmu sendiri dan merasakan kekayaan budaya Jawa!",
+        "Belajar mengekspresikan gagasan dan nilai budaya melalui bahasa dan karya sastra sederhana.",
       materi: formatted.filter((m) => m.level == "3"),
     },
   ];

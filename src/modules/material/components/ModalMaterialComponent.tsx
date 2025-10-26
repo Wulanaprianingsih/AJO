@@ -45,7 +45,7 @@ export default function ModalMaterialComponent({
       content_text: "",
       sample_quiz: {
         question: "",
-        options: ["", "", "", ""],
+        options: [],
         answer: "",
       },
     },
@@ -55,22 +55,27 @@ export default function ModalMaterialComponent({
 
   useEffect(() => {
     if (defaultValue) {
+      const options = defaultValue.sample_quiz?.options.map((x) => ({
+        text: x,
+      }));
+      const indexOfAnswer = defaultValue.sample_quiz.options.indexOf(
+        defaultValue.sample_quiz.answer
+      );
+      const letterMap = ["A", "B", "C", "D"];
+      const defaultAnswer = letterMap[indexOfAnswer] || "";
       reset({
         ...defaultValue,
         sample_quiz: {
           question: defaultValue.sample_quiz?.question || "",
           options:
-            defaultValue.sample_quiz?.options?.length === 4
-              ? defaultValue.sample_quiz.options
-              : ["", "", "", ""],
-          answer: defaultValue.sample_quiz.answer || undefined,
+            defaultValue.sample_quiz?.options?.length === 4 ? options : [],
+          answer: defaultAnswer || undefined,
         },
       });
     } else {
       reset();
     }
   }, [defaultValue, reset]);
-
   const handleThumbnailUpload = (file: File) => {
     if (!file.type.startsWith("image/")) {
       message.error("File harus berupa gambar!");
