@@ -31,7 +31,7 @@ export default function SampleQuizForm() {
 
   return (
     <div className="mt-8">
-      <div className="text-[#5E331E] font-medium mb-2">Sample Quiz</div>
+      <div className="text-[#5E331E] font-medium mb-2">Contoh Soal</div>
       <Controller
         name="sample_quiz.question"
         control={control}

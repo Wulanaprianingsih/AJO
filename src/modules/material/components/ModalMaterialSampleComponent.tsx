@@ -153,7 +153,7 @@ export default function ModalMaterialSampleComponent({
             <Input.TextArea placeholder="Konten teks materi" />
           </Form.Item>
 
-          <Card type="inner" title="Sample Quiz">
+          <Card type="inner" title="Contoh Soal">
             <Form.Item label="Question" name={["sample_quiz", "question"]}>
               <Input placeholder="Pertanyaan" />
             </Form.Item>
