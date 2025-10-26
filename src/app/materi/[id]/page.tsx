@@ -1,5 +1,5 @@
 import MaterialContainer from "modules/material/containers/MaterialContainer";
 
-export default function MaterialUserPage() {
+export default function MaterialAdminPage() {
   return <MaterialContainer />;
 }

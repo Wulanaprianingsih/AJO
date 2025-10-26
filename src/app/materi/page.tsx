@@ -3,7 +3,7 @@ import MaterialListAdminContainer from "modules/material/containers/MaterialList
 import MaterialListContainer from "modules/material/containers/MaterialListContainer";
 import { useUserStore } from "store/userDataStore";
 
-export default function MaterialUserListPage() {
+export default function MaterialAdminListPage() {
   const userData = useUserStore((s) => s.userProfile);
   const role = userData?.role;
   if (role === "admin") {

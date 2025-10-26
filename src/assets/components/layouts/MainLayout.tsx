@@ -11,8 +11,9 @@ import {
   TrophyOutlined,
   UserOutlined,
   LogoutOutlined,
+  EditOutlined,
 } from "@ant-design/icons";
-import { Modal, Spin } from "antd";
+import { Popconfirm, Spin } from "antd";
 import imgLogo from "assets/images/logo.png";
 import { supabase } from "lib/supabaseClient";
 import { useUserStore } from "store/userDataStore";
@@ -24,22 +25,33 @@ export default function MainLayout({
 }) {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
-  const [logoutModal, setLogoutModal] = useState(false);
   const userData = useUserStore((s) => s.userProfile);
   const role = userData?.role;
 
   const menu = [
     { name: "Dashboard", path: "/dashboard", icon: <HomeOutlined /> },
     { name: "Belajar", path: "/belajar", icon: <ReadOutlined /> },
+    { name: "Materi", path: "/materi", icon: <ReadOutlined /> },
+    { name: "Latihan", path: "/latihan", icon: <EditOutlined /> },
     { name: "Peringkat", path: "/peringkat", icon: <TrophyOutlined /> },
     { name: "Profil", path: "/profil", icon: <UserOutlined /> },
     { name: "Keluar", path: "/logout", icon: <LogoutOutlined /> },
   ];
 
-  const handleLogout = async () => {
-    setLogoutModal(false);
-    const { error } = await supabase.auth.signOut();
+  const filteredMenu = menu.filter((item) => {
+    if (role === "admin") {
+      return ["Dashboard", "Materi", "Latihan", "Profil", "Keluar"].includes(
+        item.name
+      );
+    } else {
+      return ["Dashboard", "Belajar", "Peringkat", "Profil", "Keluar"].includes(
+        item.name
+      );
+    }
+  });
 
+  const handleLogout = async () => {
+    const { error } = await supabase.auth.signOut();
     if (error) throw new Error(error.message);
     window.location.href = "/auth/login";
   };
@@ -72,36 +84,42 @@ export default function MainLayout({
         </div>
 
         <nav className="flex flex-col gap-3 w-full">
-          {menu
-            .filter((item) => !(item.name === "Peringkat" && role === "admin"))
-            .map((item) => {
-              const isActive = pathname.startsWith(item.path);
+          {filteredMenu.map((item) => {
+            const isActive = pathname.startsWith(item.path);
 
-              return item.name !== "Keluar" ? (
-                <Link
-                  key={item.path}
-                  href={item.path}
-                  className={`flex items-center gap-3 px-4 py-2 rounded-lg font-medium transition-all w-full text-left ${
-                    isActive
-                      ? "bg-[#E9D4B6] text-[#3A2C1A] shadow-sm"
-                      : "hover:bg-[#7A5633] text-white"
-                  }`}
-                  onClick={() => setOpen(false)}
-                >
-                  <span className="text-lg">{item.icon}</span>
-                  <span>{item.name}</span>
-                </Link>
-              ) : (
+            return item.name !== "Keluar" ? (
+              <Link
+                key={item.path}
+                href={item.path}
+                className={`flex items-center gap-3 px-4 py-2 rounded-lg font-medium transition-all w-full text-left ${
+                  isActive
+                    ? "bg-[#E9D4B6] text-[#3A2C1A] shadow-sm"
+                    : "hover:bg-[#7A5633] text-white"
+                }`}
+                onClick={() => setOpen(false)}
+              >
+                <span className="text-lg">{item.icon}</span>
+                <span>{item.name}</span>
+              </Link>
+            ) : (
+              <Popconfirm
+                title="Konfirmasi Keluar"
+                description="Apakah kamu yakin ingin keluar dari akun ini?"
+                okText="Ya"
+                cancelText="Tidak"
+                onConfirm={handleLogout}
+                classNames={{ root: "custom-popconfirm" }}
+              >
                 <button
                   key={item.path}
-                  onClick={() => setLogoutModal(true)}
                   className="flex items-center gap-3 px-4 py-2 rounded-lg font-medium transition-all w-full text-left hover:bg-[#7A5633] text-white"
                 >
                   <span className="text-lg">{item.icon}</span>
                   <span>{item.name}</span>
                 </button>
-              );
-            })}
+              </Popconfirm>
+            );
+          })}
         </nav>
 
         <div className="mt-auto text-xs opacity-80 pt-4">©2025</div>
@@ -130,19 +148,6 @@ export default function MainLayout({
           {children}
         </Suspense>
       </main>
-      <Modal
-        title={
-          <p className="text-[#5E331E] font-semibold">Konfirmasi Keluar</p>
-        }
-        open={logoutModal}
-        onOk={handleLogout}
-        onCancel={() => setLogoutModal(false)}
-        okText="Ya, Keluar"
-        cancelText="Batal"
-        centered
-      >
-        <p>Apakah kamu yakin ingin keluar dari akun ini?</p>
-      </Modal>
     </div>
   );
 }

@@ -24,7 +24,7 @@ export default function ExercisesContainer() {
   const userProfile = useUserStore((state) => state.userProfile);
   const material = useMaterialState((s) => s.materials);
   const [openBadgeModal, setOpenBagdeModal] = useState(false)
-  const [badges, setBadges] = useState<IBadge[]>([]);
+  const [badgeName, setBadgeName] = useState('')
 
   const detailMaterial = material.find(
     (x) => x.id.toString() == materiId?.toString()
@@ -79,6 +79,7 @@ export default function ExercisesContainer() {
     point: number,
     answer: Record<number, string>
   ) => {
+    const badges:IBadge[] = [];
     const userAttemptCount = await getUserExampHistory(Number(materiId));
     const calculatedPoint = await calculatePoint(point, userAttemptCount);
     const _payload = {
@@ -96,11 +97,13 @@ export default function ExercisesContainer() {
             "Kamu perlu mempelajari ulang materi ini sebelum mencoba lagi."
           );
         } else {
-          setBadges((prev) => [...prev, { name: "Pejuang Remedial" }]);
+          badges.push({ name: "Pejuang Remedial", });
+          setBadgeName("Pejuang Remedial")
         }
       } else {
         if (calculatedPoint === 100) {
-          setBadges((prev) => [...prev, { name: "Ahli Materi " + detailMaterial?.title }]);
+          badges.push({ name: "Ahli Materi " + detailMaterial?.title });
+          setBadgeName("Ahli Materi " + detailMaterial?.title)
         }
       }
 
@@ -118,7 +121,8 @@ export default function ExercisesContainer() {
         await updateUserPoint(payloadUpdateUser);
 
         if (isLevelUp) {
-          setBadges((prev) => [...prev, { name: `Rajin Level ${detailMaterial?.level}` }]);
+          badges.push({ name:`Rajin Level ${detailMaterial?.level}` });
+          setBadgeName(`Rajin Level ${detailMaterial?.level}`)
           alert(
             `🎉 Hebat! Kamu telah naik ke Level ${newLevel}! Materi baru sudah terbuka 🔓`
           );
@@ -130,6 +134,7 @@ export default function ExercisesContainer() {
         ...x,
         user_id: user_id,
       }));
+      console.log('badgesPayload', badgesPayload)
       await insertUserBadge(badgesPayload);
 
       await fetchUserData(user_id);
@@ -143,14 +148,13 @@ export default function ExercisesContainer() {
     route.push('/belajar')
   }
 
-  console.log('badges', badges)
   useEffect(() => {
-    if (badges.length > 0) {
+    if (badgeName.length > 0) {
       setOpenBagdeModal(true);
     }
-  }, [badges]);
-  
+  }, [badgeName]);
 
+  
   return (
     <ExercisesComponent
       onSubmit={handleSubmit}
@@ -158,7 +162,7 @@ export default function ExercisesContainer() {
       userAnswers={detailMaterial?.user_answers?.[0]?.answer}
       handleCloseModal={handleCloseModal}
       openBagdeModal={openBadgeModal}
-      badgeName={badges?.[0]?.name}
+      badgeName={badgeName}
     />
   );
 }
