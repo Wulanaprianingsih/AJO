@@ -57,7 +57,8 @@ export default function MaterialListComponent({
           {levels.map((level: IMateriLevel, idx) => {
             const unlocked =
               idx === 0 ||
-              levels[idx - 1].materi.length > 0 && levels[idx - 1].materi.every((x) => x.last_point >= KKM);
+              (levels[idx - 1].materi.length > 0 &&
+                levels[idx - 1].materi.every((x) => x.last_point >= KKM));
             return (
               <div
                 key={idx}
@@ -109,10 +110,8 @@ export default function MaterialListComponent({
                     {level.materi.map((m, mi) => {
                       const isUnlocked =
                         mi === 0 || level.materi[mi - 1].last_point >= KKM;
-                      // const isUnlocked = checkMateriUnlocked(level.materi, mi);
                       const score = m.last_point ?? 0;
                       const attempts = m.excercise_history?.length ?? 0;
-                      // const attempts = userData?.attempts?.[m.title] ?? 1; // harusnya ini
                       const status =
                         score >= KKM ? "✅ Lulus" : "❌ Belum Lulus";
 

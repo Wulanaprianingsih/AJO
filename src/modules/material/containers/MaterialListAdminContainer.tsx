@@ -39,6 +39,12 @@ export default function MaterialListAdminContainer() {
       align: "center" as const,
     },
     {
+      title: "Urutan",
+      dataIndex: "sequence",
+      key: "sequence",
+      align: "center" as const,
+    },
+    {
       title: "Tanggal Pembuatan",
       dataIndex: "created_at",
       key: "created_at",
