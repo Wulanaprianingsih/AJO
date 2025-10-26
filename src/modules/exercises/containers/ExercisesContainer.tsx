@@ -1,7 +1,7 @@
 "use client";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import ExercisesComponent from "../components/ExercisesComponent";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import {
   getUserExampHistory,
   insertExcercisesHistory,
@@ -13,17 +13,20 @@ import { useUserStore } from "store/userDataStore";
 import { useMaterialState } from "store/materialStore";
 import { fetchMaterials } from "services/materialService";
 
+interface IBadge {
+  name: string;
+}
 export default function ExercisesContainer() {
   const KKM = 70;
   const params = useParams();
+  const route = useRouter();
   const materiId = params.id;
   const userProfile = useUserStore((state) => state.userProfile);
   const material = useMaterialState((s) => s.materials);
+  const [openBadgeModal, setOpenBagdeModal] = useState(false);
   const detailMaterial = material.find(
     (x) => x.id.toString() == materiId?.toString()
   );
-
-  console.log("detailMaterial", detailMaterial);
 
   const excercises = detailMaterial?.excercises.map((ex) => ({
     id: ex.id,
@@ -59,24 +62,21 @@ export default function ExercisesContainer() {
     };
 
     await insertUserAnswers(payload);
-    console.log("payload", payload);
   };
 
   const calculatePoint = async (point: number, attemptCount: number) => {
-    console.log("attemptCount", attemptCount);
     const deduction = [0, 15, 30];
     const percent = deduction[attemptCount] ?? 0;
-    console.log("percent", percent);
     return Math.max(0, point - point * (percent / 100));
   };
 
   const user_id = userProfile?.id ?? "";
 
+  const badges: IBadge[] = [];
   const handleSubmit = async (
     point: number,
     answer: Record<number, string>
   ) => {
-    const badges = [];
     const userAttemptCount = await getUserExampHistory(Number(materiId));
     const calculatedPoint = await calculatePoint(point, userAttemptCount);
     const _payload = {
@@ -124,6 +124,7 @@ export default function ExercisesContainer() {
           );
         }
         await insertUserAnswer(answer);
+        setOpenBagdeModal(true);
       }
 
       const badgesPayload = badges.map((x) => ({
@@ -138,11 +139,19 @@ export default function ExercisesContainer() {
     }
   };
 
+  const handleCloseModal = () => {
+    setOpenBagdeModal(false);
+    route.push("/belajar");
+  };
+
   return (
     <ExercisesComponent
       onSubmit={handleSubmit}
       data={excercises}
       userAnswers={detailMaterial?.user_answers?.[0]?.answer}
+      handleCloseModal={handleCloseModal}
+      openBagdeModal={openBadgeModal}
+      badgeName={badges?.[0]?.name}
     />
   );
 }

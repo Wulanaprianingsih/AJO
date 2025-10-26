@@ -34,11 +34,14 @@ export default function DashboardUserContainer() {
     }
   };
 
+  const lastRead = userData?.materials;
+
   return (
     <DashboardUserComponent
       role={role}
       dashboardData={dashboardData}
       badgeImg={renderBadgeImg()?.src}
+      lastRead={lastRead}
     />
   );
 }

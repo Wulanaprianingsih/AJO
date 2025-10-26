@@ -5,6 +5,8 @@ import MaterialListComponent from "../components/MaterialListComponent";
 import { useRouter } from "next/navigation";
 import { useMaterialState } from "store/materialStore";
 import { fetchMaterials } from "services/materialService";
+import { updateLastRead } from "services/userService";
+import { useUserStore } from "store/userDataStore";
 
 const dummyUserData = {
   scores: {
@@ -17,6 +19,7 @@ const dummyUserData = {
 export default function MaterialListContainer() {
   const router = useRouter();
   const materials = useMaterialState((state) => state.materials);
+  const currentUser = useUserStore((state) => state.userProfile);
 
   useEffect(() => {
     fetchMaterials();
@@ -60,8 +63,11 @@ export default function MaterialListContainer() {
   );
   const [openLevel, setOpenLevel] = useState<number | null>(null);
 
-  const handleNavigate = (materi: { title: string; id: number }) => {
+  const handleNavigate = async (materi: { title: string; id: number }) => {
     router.push(`/belajar/${materi.id}`);
+    if (currentUser?.email) {
+      await updateLastRead(materi.id, currentUser?.email, currentUser?.id);
+    }
   };
 
   return (

@@ -5,6 +5,8 @@ import { Card, Radio, Button, Progress } from "antd";
 import Image from "next/image";
 import EmptyQuestion from "./EmptyQuestion";
 import { useRouter } from "next/navigation";
+import BadgeModal from "./BadgeModalComponent";
+import { useUserStore } from "store/userDataStore";
 
 interface IQuestion {
   id: number;
@@ -19,15 +21,26 @@ interface IExcercise {
   onSubmit: (point: number, answer: Record<number, string>) => Promise<void>;
   data: IQuestion[] | undefined;
   userAnswers: Record<number, string> | undefined;
+  handleCloseModal: () => void;
+  openBagdeModal: boolean;
+  badgeName: string;
 }
 
 export default function ExercisesComponent(props: IExcercise) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [answers, setAnswers] = useState<Record<number, string>>({});
   const [submitted, setSubmitted] = useState(false);
+  const userProfile = useUserStore((state) => state.userProfile);
   const route = useRouter();
 
-  const { onSubmit, data, userAnswers } = props;
+  const {
+    onSubmit,
+    data,
+    userAnswers,
+    openBagdeModal,
+    handleCloseModal,
+    badgeName,
+  } = props;
 
   if (!data || data.length === 0) {
     return (
@@ -68,10 +81,16 @@ export default function ExercisesComponent(props: IExcercise) {
   };
 
   const total = data.length;
+  console.log("userProfile", userProfile);
 
   if (submitted) {
     return (
       <MainLayout>
+        <BadgeModal
+          open={openBagdeModal}
+          onClose={handleCloseModal}
+          badgeName={badgeName ?? userProfile?.user_badges[0].name}
+        />
         <div className="min-h-[80vh] bg-[#F8F5EB] p-6 md:p-10 rounded-2xl shadow-sm flex flex-col gap-6 max-w-3xl mx-auto text-center">
           <h2 className="text-2xl font-bold text-[#5E331E] mb-4">
             Hasil Latihanmu 🎉
@@ -185,7 +204,6 @@ export default function ExercisesComponent(props: IExcercise) {
           </h2>
           <p className="text-sm opacity-70">{currentQuestion.title}</p>
         </div>
-        {/* <Button onClick={() => onSubmit(100, answers)}>Test Submit</Button> */}
         <Card
           style={{
             backgroundColor: "#FCF8E7",
@@ -222,7 +240,7 @@ export default function ExercisesComponent(props: IExcercise) {
                 : answers[currentQuestion.id]
             }
             className="!flex flex-col gap-2"
-            disabled
+            disabled={userAnswers ? true : false}
           >
             {currentQuestion.options.map((op, i) => (
               <Radio

@@ -25,7 +25,6 @@ interface IUpdateUserPayload {
 }
 export const updateUserPoint = async (props: IUpdateUserPayload) => {
     const {points, email, level} = props
-    console.log('props', props)
 
     const payload: IUpdateUserPayload = {points: points}
     if(level && level > 0) payload.level = level 
@@ -37,11 +36,22 @@ export const updateUserPoint = async (props: IUpdateUserPayload) => {
     if (error) throw error
 }
 
+export const updateLastRead = async (id: number, email: string, userId: string) => {
+    const payload = {current_material: id}
+    
+    const { error } = await supabase
+        .from("users")
+        .update(payload)
+        .eq('email', email)
+    if (error) throw error
+    await fetchUserData(userId)
+}
+
 export const fetchUserData = async (id: string) => {
     const setUserProfile = useUserStore.getState().setUserProfile
     const { data: userData, error: userError } = await supabase
         .from("users")
-        .select("*, user_badges ( * )")
+        .select("*, user_badges ( * ), materials ( title, description, thumbnail, id )")
         .eq("id", id)
         .maybeSingle();
 
@@ -50,9 +60,8 @@ export const fetchUserData = async (id: string) => {
         ...userData,
         user_badges: userData.user_badges.sort(
             (a: userBadgeProps, b: userBadgeProps) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
-        )
+        ),
     }
 
-    console.log('_userData', _userData)
     setUserProfile(_userData);
 }

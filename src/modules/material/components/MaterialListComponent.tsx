@@ -166,7 +166,7 @@ export default function MaterialListComponent({
                                 </div>
                                 {isUnlocked && (
                                   <>
-                                    <div className="h-2 bg-[#EFEAD8] rounded-full overflow-hidden mt-1">
+                                    <div className="h-2 bg-white rounded-full overflow-hidden mt-1">
                                       <div
                                         className="h-2 bg-green-500 rounded-full transition-all"
                                         style={{ width: `${score}%` }}

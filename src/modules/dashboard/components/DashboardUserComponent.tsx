@@ -8,9 +8,10 @@ import bgBatik from "assets/images/bg_batik.png";
 import dashboardIllust from "assets/images/dashboard_illust.png";
 import rewardIcon from "assets/icons/reward.png";
 import historyIcon from "assets/icons/history.png";
-import aksaraIcon from "assets/images/aksara-jawa.png";
 import levelIcon from "assets/icons/level_up.png";
 import pointIcon from "assets/icons/point.png";
+import { lastReadProps } from "types/userData";
+import { useRouter } from "next/navigation";
 
 interface IProps {
   role: string | undefined;
@@ -22,10 +23,13 @@ interface IProps {
         level: number;
       }
     | undefined;
+  lastRead: lastReadProps | undefined
 }
 
 export default function DashboardUserComponent(props: IProps) {
-  const { dashboardData, badgeImg } = props;
+  const { dashboardData, badgeImg, lastRead } = props;
+
+  const router = useRouter()
 
   return (
     <MainLayout>
@@ -161,12 +165,12 @@ export default function DashboardUserComponent(props: IProps) {
         <Card
           title={
             <div className="flex items-center gap-2">
-              <Image
-                src={historyIcon}
-                alt="Materi Saat Ini"
-                width={24}
-                height={24}
-              />
+                <Image
+                  src={historyIcon}
+                  alt="Materi Saat Ini"
+                  width={24}
+                  height={24}
+                />
               <span className="font-semibold text-[#5E331E] text-base md:text-lg">
                 Materi Saat Ini
               </span>
@@ -177,23 +181,25 @@ export default function DashboardUserComponent(props: IProps) {
         >
           <div className="flex flex-col md:flex-row items-center justify-between gap-4">
             <div className="flex items-center gap-4 text-center md:text-left">
-              <Image
-                src={aksaraIcon}
-                alt="Aksara Jawa"
-                width={64}
-                height={64}
-                className="object-contain"
-              />
+              {lastRead?.thumbnail && (
+                <Image
+                  src={lastRead?.thumbnail}
+                  alt="Aksara Jawa"
+                  width={64}
+                  height={64}
+                  className="object-contain"
+                />
+              )}
               <div>
                 <h3 className="text-lg font-semibold text-[#5E331E]">
-                  Aksara Jawa
+                 {lastRead?.title}
                 </h3>
                 <p className="text-sm text-[#5E331E] max-w-[250px] md:max-w-none">
-                  Belajar huruf - huruf dasar, sandhangan, dan pasangan.
+                  {lastRead?.description}
                 </p>
               </div>
             </div>
-            <Button type="primary" className="!rounded-full px-6">
+            <Button type="primary" className="!rounded-full px-6" onClick={() => router.push(`/belajar/${lastRead?.id}`)} >
               Lanjut
             </Button>
           </div>
