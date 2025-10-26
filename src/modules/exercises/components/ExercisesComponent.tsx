@@ -71,7 +71,7 @@ export default function ExercisesComponent(props: IExcercise) {
 
   const handleSubmit = () => {
     if (userAnswers) {
-      route.push("/material");
+      route.push("/belajar");
     } else {
       setSubmitted(true);
       onSubmit(correctCount * 10, answers);
@@ -160,7 +160,7 @@ export default function ExercisesComponent(props: IExcercise) {
           <Button
             onClick={() => {
               if (correctCount >= 7) {
-                route.push("/material");
+                route.push("/belajar");
               } else {
                 setSubmitted(false);
                 setCurrentIndex(0);
