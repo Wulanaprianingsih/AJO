@@ -6,7 +6,6 @@ import Image from "next/image";
 import EmptyQuestion from "./EmptyQuestion";
 import { useRouter } from "next/navigation";
 import BadgeModal from "./BadgeModalComponent";
-import { useUserStore } from "store/userDataStore";
 
 interface IQuestion {
   id: number;
@@ -30,7 +29,6 @@ export default function ExercisesComponent(props: IExcercise) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [answers, setAnswers] = useState<Record<number, string>>({});
   const [submitted, setSubmitted] = useState(false);
-  const userProfile = useUserStore((state) => state.userProfile);
   const route = useRouter();
 
   const {
@@ -81,7 +79,6 @@ export default function ExercisesComponent(props: IExcercise) {
   };
 
   const total = data.length;
-  console.log("userProfile", userProfile);
 
   if (submitted) {
     return (
@@ -89,7 +86,7 @@ export default function ExercisesComponent(props: IExcercise) {
         <BadgeModal
           open={openBagdeModal}
           onClose={handleCloseModal}
-          badgeName={badgeName ?? userProfile?.user_badges[0].name}
+          badgeName={badgeName}
         />
         <div className="min-h-[80vh] bg-[#F8F5EB] p-6 md:p-10 rounded-2xl shadow-sm flex flex-col gap-6 max-w-3xl mx-auto text-center">
           <h2 className="text-2xl font-bold text-[#5E331E] mb-4">

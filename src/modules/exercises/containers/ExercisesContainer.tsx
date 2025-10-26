@@ -14,16 +14,18 @@ import { useMaterialState } from "store/materialStore";
 import { fetchMaterials } from "services/materialService";
 
 interface IBadge {
-  name: string;
+  name: string
 }
 export default function ExercisesContainer() {
   const KKM = 70;
   const params = useParams();
-  const route = useRouter();
+  const route = useRouter()
   const materiId = params.id;
   const userProfile = useUserStore((state) => state.userProfile);
   const material = useMaterialState((s) => s.materials);
-  const [openBadgeModal, setOpenBagdeModal] = useState(false);
+  const [openBadgeModal, setOpenBagdeModal] = useState(false)
+  const [badges, setBadges] = useState<IBadge[]>([]);
+
   const detailMaterial = material.find(
     (x) => x.id.toString() == materiId?.toString()
   );
@@ -62,6 +64,7 @@ export default function ExercisesContainer() {
     };
 
     await insertUserAnswers(payload);
+    console.log("payload", payload);
   };
 
   const calculatePoint = async (point: number, attemptCount: number) => {
@@ -72,7 +75,6 @@ export default function ExercisesContainer() {
 
   const user_id = userProfile?.id ?? "";
 
-  const badges: IBadge[] = [];
   const handleSubmit = async (
     point: number,
     answer: Record<number, string>
@@ -94,13 +96,11 @@ export default function ExercisesContainer() {
             "Kamu perlu mempelajari ulang materi ini sebelum mencoba lagi."
           );
         } else {
-          badges.push({
-            name: "Pejuang Remedial",
-          });
+          setBadges((prev) => [...prev, { name: "Pejuang Remedial" }]);
         }
       } else {
         if (calculatedPoint === 100) {
-          badges.push({ name: "Ahli Materi " + detailMaterial?.title });
+          setBadges((prev) => [...prev, { name: "Ahli Materi " + detailMaterial?.title }]);
         }
       }
 
@@ -118,13 +118,12 @@ export default function ExercisesContainer() {
         await updateUserPoint(payloadUpdateUser);
 
         if (isLevelUp) {
-          badges.push({ name: `Rajin Level ${detailMaterial?.level}` });
+          setBadges((prev) => [...prev, { name: `Rajin Level ${detailMaterial?.level}` }]);
           alert(
             `🎉 Hebat! Kamu telah naik ke Level ${newLevel}! Materi baru sudah terbuka 🔓`
           );
         }
         await insertUserAnswer(answer);
-        setOpenBagdeModal(true);
       }
 
       const badgesPayload = badges.map((x) => ({
@@ -140,9 +139,17 @@ export default function ExercisesContainer() {
   };
 
   const handleCloseModal = () => {
-    setOpenBagdeModal(false);
-    route.push("/belajar");
-  };
+    setOpenBagdeModal(false)
+    route.push('/belajar')
+  }
+
+  console.log('badges', badges)
+  useEffect(() => {
+    if (badges.length > 0) {
+      setOpenBagdeModal(true);
+    }
+  }, [badges]);
+  
 
   return (
     <ExercisesComponent
