@@ -31,8 +31,8 @@ interface IProps {
 export default function DashboardAdminComponent(props: IProps) {
   const { users, excercises, materials, newestMaterial } = props;
   const LEVEL_MAP: Record<string, string> = {
-    "1": "Pemula",
-    "2": "Menengah",
+    "1": "Pamula",
+    "2": "Penengah",
     "3": "Master",
   };
 

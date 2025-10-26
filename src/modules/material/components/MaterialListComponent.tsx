@@ -3,7 +3,6 @@ import MainLayout from "assets/components/layouts/MainLayout";
 import Image from "next/image";
 
 import lockIcon from "assets/icons/lock.png";
-import openBookIcon from "assets/icons/open-book.png";
 import bookIcon from "assets/icons/book.png";
 import level1 from "assets/icons/level1.png";
 import level2 from "assets/icons/level2.png";
@@ -22,6 +21,7 @@ interface IMateriLevel {
     id?: number;
     excercise_history: IExcerciseHistory[];
     last_point: number;
+    thumbnail: string;
   }[];
 }
 
@@ -57,7 +57,7 @@ export default function MaterialListComponent({
           {levels.map((level: IMateriLevel, idx) => {
             const unlocked =
               idx === 0 ||
-              levels[idx - 1].materi.every((x) => x.last_point >= KKM);
+              levels[idx - 1].materi.length > 0 && levels[idx - 1].materi.every((x) => x.last_point >= KKM);
             return (
               <div
                 key={idx}
@@ -145,7 +145,7 @@ export default function MaterialListComponent({
                           >
                             <div className="flex items-center gap-3">
                               <Image
-                                src={isUnlocked ? openBookIcon : lockIcon}
+                                src={isUnlocked ? m.thumbnail : lockIcon}
                                 alt="materi"
                                 width={40}
                                 height={40}

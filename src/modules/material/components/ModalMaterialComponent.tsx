@@ -220,7 +220,7 @@ export default function ModalMaterialComponent({
             render={({ field }) => (
               <div className="my-6">
                 <label className="mb-1 block font-medium text-[#5e331e]">
-                  Penjelasan Materi
+                  Katrangan Materi
                 </label>
                 <ReactQuill
                   theme="snow"

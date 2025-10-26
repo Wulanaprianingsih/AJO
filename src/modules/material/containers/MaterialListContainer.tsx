@@ -33,6 +33,7 @@ export default function MaterialListContainer() {
     id: x.id,
     excercise_history: x.excercise_history,
     last_point: x.excercise_history?.[0]?.point ?? 0,
+    thumbnail: x.thumbnail ?? '',
   }));
 
   console.log("materials", materials);

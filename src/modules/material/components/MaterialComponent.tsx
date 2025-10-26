@@ -40,7 +40,7 @@ export default function MaterialComponent({
     }
     return url;
   };
-  console.log("course.media_url", course.media_url);
+  console.log("course", course);
 
   return (
     <MainLayout>
@@ -88,7 +88,7 @@ export default function MaterialComponent({
             Penjelasan Materi
           </h2>
           <div
-            className="text-[#5C3B1E] leading-relaxed whitespace-pre-line"
+            className="card-content text-[#5C3B1E] leading-relaxed whitespace-pre-line"
             dangerouslySetInnerHTML={{ __html: course.content_text }}
           />
         </Card>
