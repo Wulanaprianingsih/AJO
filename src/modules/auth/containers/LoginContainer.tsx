@@ -33,11 +33,18 @@ export default function LoginContainer() {
       });
     } catch (err) {
       if (err instanceof Error) {
-        toast.error(`Login gagal: ${+err.message}`, {
-          position: "top-right",
-        });
+        toast.error(
+          `Login gagal: ${
+            err.message === "Invalid login credentials"
+              ? "email/kata sandi tidak sesuai"
+              : err.message
+          }`,
+          {
+            position: "top-right",
+          }
+        );
       } else {
-        toast.error("Login gagal: Terjadi kesalahan tidak terduga", {
+        toast.error("Login gagal: terjadi kesalahan tidak terduga", {
           position: "top-right",
         });
       }

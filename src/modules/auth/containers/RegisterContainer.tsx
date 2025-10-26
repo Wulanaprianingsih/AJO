@@ -45,11 +45,19 @@ export function RegisterContainer() {
       });
     } catch (err) {
       if (err instanceof Error) {
-        toast.error(`Register gagal: ${+err.message}`, {
-          position: "top-right",
-        });
+        toast.error(
+          `Register gagal: ${
+            err.message ===
+            'duplicate key value violates unique constraint "users_email_key"'
+              ? "email telah digunakan"
+              : err.message
+          }`,
+          {
+            position: "top-right",
+          }
+        );
       } else {
-        toast.error("Register gagal: Terjadi kesalahan tidak terduga", {
+        toast.error("Register gagal: terjadi kesalahan tidak terduga", {
           position: "top-right",
         });
       }
