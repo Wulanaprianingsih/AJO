@@ -30,6 +30,18 @@ export default function MaterialComponent({
     setIsCorrect(value === course.quiz?.answer);
   };
 
+  const getEmbedUrl = (url: string) => {
+    if (url.includes("youtube.com/watch")) {
+      return url.replace("watch?v=", "embed/");
+    }
+    if (url.includes("youtu.be/")) {
+      const videoId = url.split("/").pop()?.split("?")[0];
+      return `https://www.youtube.com/embed/${videoId}`;
+    }
+    return url;
+  };
+  console.log("course.media_url", course.media_url);
+
   return (
     <MainLayout>
       <div className="min-h-[80vh] bg-[#F8F5EB] p-6 md:p-10 rounded-2xl shadow-sm flex flex-col gap-8">
@@ -45,11 +57,11 @@ export default function MaterialComponent({
             {course.media_type === "video" ? (
               <div className="w-full max-w-3xl aspect-video rounded-2xl overflow-hidden shadow-md">
                 <iframe
-                  src={course.media_url.replace("watch?v=", "embed/")}
+                  src={getEmbedUrl(course.media_url)}
                   title={course.title}
                   allowFullScreen
                   className="w-full h-full"
-                ></iframe>
+                />
               </div>
             ) : (
               <div className="relative w-full max-w-3xl h-[350px] rounded-2xl overflow-hidden shadow-md">
@@ -75,9 +87,10 @@ export default function MaterialComponent({
           <h2 className="text-lg font-semibold mb-3 text-[#5C3B1E]">
             Penjelasan Materi
           </h2>
-          <p className="text-[#5C3B1E] leading-relaxed whitespace-pre-line">
-            {course.content_text}
-          </p>
+          <div
+            className="text-[#5C3B1E] leading-relaxed whitespace-pre-line"
+            dangerouslySetInnerHTML={{ __html: course.content_text }}
+          />
         </Card>
 
         <Card
