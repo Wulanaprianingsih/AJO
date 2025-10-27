@@ -79,7 +79,6 @@ export default function ExercisesComponent(props: IExcercise) {
   };
 
   const total = data.length;
-
   if (submitted) {
     return (
       <MainLayout>
@@ -178,7 +177,7 @@ export default function ExercisesComponent(props: IExcercise) {
               marginTop: 20,
             }}
           >
-            {correctCount >= 7 ? "Lanjut ke Materi" : "Ulangi Latihan"}
+            {correctCount >= 7 || badgeName === 'sad' ? "Lanjut ke Materi" : "Ulangi Latihan"}
           </Button>
         </div>
       </MainLayout>
@@ -220,7 +219,7 @@ export default function ExercisesComponent(props: IExcercise) {
                   src={currentQuestion.image_url ?? ""}
                   alt={`Soal ${currentQuestion.id}`}
                   fill
-                  className="object-cover"
+                  className="object-contain"
                 />
               </div>
               <h3 className="text-[#5E331E] text-lg font-medium mb-4">

@@ -6,6 +6,7 @@ import rajin_level2 from "assets/badges/rajin_level2.png";
 import rajin_level3 from "assets/badges/rajin_level3.png";
 import ahliMateri from "assets/badges/ahli_materi.png";
 import pejuang_remedial from "assets/badges/pejuang_remedial.png";
+import sad from "assets/badges/sad.png";
 
 const { Title } = Typography;
 
@@ -16,7 +17,6 @@ interface BadgeModalProps {
 }
 
 const renderBadgeImg = (badge: string) => {
-  console.log("badge", badge);
   if (badge.includes("Ahli Materi")) {
     return ahliMateri;
   } else if (badge === "Pejuang Remedial") {
@@ -25,16 +25,29 @@ const renderBadgeImg = (badge: string) => {
     return rajin_level1;
   } else if (badge === "Rajin Level 2") {
     return rajin_level2;
-  } else {
+  } else if(badge === "Rajin level 3") {
     return rajin_level3;
+  } else {
+    return sad
   }
 };
 
 const BadgeModal: React.FC<BadgeModalProps> = ({
   open,
   onClose,
-  badgeName,
+  badgeName
 }) => {
+  const isLevelUp = badgeName.includes('Rajin Level')
+  const isResetProgress = badgeName === 'sad'
+  const renderText = () => {
+    if(isLevelUp){
+      return '🎉 Hebat Kamu Naik Level! Level baru sudah terbuka 🔓'
+    } else if (isResetProgress){
+      return "Kamu perlu mempelajari ulang materi ini sebelum mencoba lagi."
+    } else {
+      return 'Selamat! kamu telah lulus! Materi baru sudah terbuka 🔓'
+    }
+  }
   return (
     <Modal
       open={open}
@@ -64,7 +77,7 @@ const BadgeModal: React.FC<BadgeModalProps> = ({
           fontWeight: 600,
         }}
       >
-        Selamat! Kamu Naik Level!
+      {renderText()} 
       </Title>
 
       <Title
@@ -75,7 +88,7 @@ const BadgeModal: React.FC<BadgeModalProps> = ({
           fontWeight: 700,
         }}
       >
-        {badgeName}
+        {isResetProgress ? '' : badgeName}
       </Title>
 
       <div className="flex justify-center mb-6">

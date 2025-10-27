@@ -52,7 +52,7 @@ export default function ExercisesContainer() {
     );
     if (getAllMateryByLevel.length === 1) return true;
     return getAllMateryByLevel.every(
-      (x) => x.excercise_history?.[0]?.point >= 70
+      (x) => x.excercise_history.length > 0 && x.excercise_history?.[0]?.point >= 70
     );
   };
 
@@ -93,9 +93,7 @@ export default function ExercisesContainer() {
 
       if (userAttemptCount === 2) {
         if (calculatedPoint < KKM) {
-          alert(
-            "Kamu perlu mempelajari ulang materi ini sebelum mencoba lagi."
-          );
+          setBadgeName('sad')
         } else {
           badges.push({ name: "Pejuang Remedial", });
           setBadgeName("Pejuang Remedial")
@@ -123,9 +121,6 @@ export default function ExercisesContainer() {
         if (isLevelUp) {
           badges.push({ name:`Rajin Level ${detailMaterial?.level}` });
           setBadgeName(`Rajin Level ${detailMaterial?.level}`)
-          alert(
-            `🎉 Hebat! Kamu telah naik ke Level ${newLevel}! Materi baru sudah terbuka 🔓`
-          );
         }
         await insertUserAnswer(answer);
       }
@@ -134,7 +129,6 @@ export default function ExercisesContainer() {
         ...x,
         user_id: user_id,
       }));
-      console.log('badgesPayload', badgesPayload)
       await insertUserBadge(badgesPayload);
 
       await fetchUserData(user_id);
