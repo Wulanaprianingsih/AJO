@@ -17,7 +17,7 @@ export default function Modal({
   handleCancel,
   children,
   title,
-  width = 720, // biar lebih lebar
+  width = 720,
 }: IProps) {
   return (
     <ModalANTD

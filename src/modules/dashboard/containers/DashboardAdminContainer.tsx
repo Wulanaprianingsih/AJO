@@ -25,12 +25,6 @@ export default function DashboardAdminContainer() {
 
   const newestMaterial = sortedMaterials.slice(0, 3);
 
-  // const sortedExcercise = excercise.sort((a, b) => {
-  //   return new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
-  // })
-
-  // const newestExcercise = sortedExcercise.slice(0, 3)
-
   return (
     <DashboardAdminComponent
       users={allUser}

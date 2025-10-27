@@ -1,8 +1,6 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
-// import { z } from "zod";
-// import { zodResolver } from "@hookform/resolvers/zod";
 import ExcerciseListAdminComponent, {
   QuestionFormValues,
 } from "../components/ExcerciseListAdminComponent";
@@ -17,19 +15,7 @@ import { EditOutlined, DeleteOutlined } from "@ant-design/icons";
 import { deleteExcercise } from "services/excerciseService";
 import dayjs from "dayjs";
 
-// const schema = z.object({
-//   title: z.string().min(1, "Title is required"),
-//   material_id: z.string().min(1, "Please select a materi"),
-//   question: z.string().min(1, "Question is required"),
-//   answer: z.string().min(1, "Answer is required"),
-// options: z
-//   .array(z.string().min(1, "Option cannot be empty"))
-//   .min(2, "At least two options required"),
-//   image: z.any().nullable(),
-// });
-
 export default function ExcerciseListAdminContainer() {
-  // const [options, setOptions] = useState<string[]>(["", ""]);
   const materials = useMaterialState((state) => state.materials);
   const [materiList, setMateriList] = useState<{ id: number; title: string }[]>(
     []
@@ -60,7 +46,6 @@ export default function ExcerciseListAdminContainer() {
     formState: { errors },
     reset,
   } = useForm<QuestionFormValues>({
-    // resolver: zodResolver(schema),
     defaultValues: {
       title: "",
       material_id: "",
@@ -70,20 +55,6 @@ export default function ExcerciseListAdminContainer() {
       image: null,
     },
   });
-
-  // const handleOptionChange = (index: number, value: string) => {
-  //   const updated = [...options];
-  //   updated[index] = value;
-  //   setOptions(updated);
-  //   setValue("options", updated);
-  // };
-
-  // const addOption = () => {
-  //   const updated = [...options, ""];
-  //   setOptions(updated);
-  //   setValue("options", updated);
-  // };
-
   const handleImageChange = (file: File | null) => {
     setValue("image", file);
   };

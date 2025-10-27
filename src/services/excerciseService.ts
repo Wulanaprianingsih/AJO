@@ -71,8 +71,6 @@ export const deleteExcercise = async (id: number) => {
   }
 };
 
-//   user services
-
 export const getUserExampHistory = async (materiId: number) => {
   const { data, error } = await supabase
     .from("user_excercise_history")

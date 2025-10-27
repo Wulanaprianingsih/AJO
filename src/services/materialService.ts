@@ -81,7 +81,6 @@ export const fetchMaterials = async (id?: number) => {
 
 export const uploadImage = async (path: string, filename: string, file: File) => {
     try {
-        // upload img
         const { error: uploadError } = await supabase.storage.from("materials").upload(`${path}/${filename}`, file, {
             cacheControl: "3600",
             upsert: true
@@ -92,9 +91,6 @@ export const uploadImage = async (path: string, filename: string, file: File) =>
             return
         }
 
-        console.log('imgae uploaded')
-
-        // get img url
         const { data: imgUrl } = await supabase.storage.from("materials").getPublicUrl(`${path}/${filename}`)
 
         return imgUrl
