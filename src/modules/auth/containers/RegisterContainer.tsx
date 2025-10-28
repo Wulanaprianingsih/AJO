@@ -36,13 +36,8 @@ export function RegisterContainer() {
           role: "user",
         },
       ]);
-
+      router.push(`/auth/confirm-email?email=${encodeURIComponent(email)}`);
       if (insertError) throw new Error(insertError.message);
-      router.push("/auth/login");
-      toast.success("Register berhasil. Silahkan lakukan konfirmasi email!", {
-        position: "top-right",
-        autoClose: false,
-      });
     } catch (err) {
       if (err instanceof Error) {
         toast.error(
