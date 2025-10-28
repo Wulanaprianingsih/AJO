@@ -1,9 +1,10 @@
 "use client";
 
+import { Suspense } from "react";
 import ConfirmEmail from "modules/auth/components/ConfirmEmail";
 import { useSearchParams } from "next/navigation";
 
-export default function ConfirmEmailPage() {
+function ConfirmEmailWrapper() {
   const searchParams = useSearchParams();
   const email = searchParams.get("email") || "";
 
@@ -16,4 +17,18 @@ export default function ConfirmEmailPage() {
   }
 
   return <ConfirmEmail email={email} />;
+}
+
+export default function ConfirmEmailPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="flex items-center justify-center min-h-screen">
+          <p>Memuat halaman...</p>
+        </div>
+      }
+    >
+      <ConfirmEmailWrapper />
+    </Suspense>
+  );
 }
