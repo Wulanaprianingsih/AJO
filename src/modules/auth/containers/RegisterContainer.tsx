@@ -37,6 +37,9 @@ export function RegisterContainer() {
         },
       ]);
       router.push(`/auth/login`);
+      toast.success("Register Berhasil!", {
+        position: "top-right",
+      });
       if (insertError) throw new Error(insertError.message);
     } catch (err) {
       if (err instanceof Error) {
