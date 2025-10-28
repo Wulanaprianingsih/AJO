@@ -36,7 +36,7 @@ export function RegisterContainer() {
           role: "user",
         },
       ]);
-      router.push(`/auth/confirm-email?email=${encodeURIComponent(email)}`);
+      router.push(`/auth/login`);
       if (insertError) throw new Error(insertError.message);
     } catch (err) {
       if (err instanceof Error) {
