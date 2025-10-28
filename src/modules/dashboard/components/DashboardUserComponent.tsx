@@ -192,14 +192,14 @@ export default function DashboardUserComponent(props: IProps) {
               )}
               <div>
                 <h3 className="text-lg font-semibold text-[#5E331E]">
-                 {lastRead?.title}
+                 {lastRead?.title ?? 'Ayo mulai belajar !'}
                 </h3>
                 <p className="text-sm text-[#5E331E] max-w-[250px] md:max-w-none">
                   {lastRead?.description}
                 </p>
               </div>
             </div>
-            <Button type="primary" className="!rounded-full px-6" onClick={() => router.push(`/belajar/${lastRead?.id}`)} >
+            <Button type="primary" className="!rounded-full px-6" onClick={() => lastRead ? router.push(`/belajar/${lastRead?.id}`) : router.push('/belajar')} >
               Lanjut
             </Button>
           </div>
