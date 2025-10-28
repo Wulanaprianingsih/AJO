@@ -31,6 +31,7 @@ interface IProps {
   openLevel: number | null;
   setOpenLevel: Dispatch<SetStateAction<number | null>>;
   levels: IMateriLevel[];
+  isLoading?: boolean;
 }
 
 export default function MaterialListComponent({
@@ -38,6 +39,7 @@ export default function MaterialListComponent({
   openLevel,
   setOpenLevel,
   levels,
+  isLoading,
 }: IProps) {
   const KKM = 70;
 
@@ -107,82 +109,92 @@ export default function MaterialListComponent({
 
                 {openLevel === idx && unlocked && (
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 p-5">
-                    {level.materi.map((m, mi) => {
-                      const isUnlocked =
-                        mi === 0 || level.materi[mi - 1].last_point >= KKM;
-                      const score = m.last_point ?? 0;
-                      const attempts = m.excercise_history?.length ?? 0;
-                      const status =
-                        score >= KKM ? "✅ Lulus" : "❌ Belum Lulus";
+                    {isLoading ? (
+                      <div className="col-span-full p-5 bg-[#EFEAD8] rounded-xl shadow-md text-center text-[#5E331E]">
+                        Sedang memuat materi. Mohon tunggu beberapa saat ya...
+                      </div>
+                    ) : (
+                      level.materi.map((m, mi) => {
+                        const isUnlocked =
+                          mi === 0 || level.materi[mi - 1].last_point >= KKM;
+                        const score = m.last_point ?? 0;
+                        const attempts = m.excercise_history?.length ?? 0;
+                        const status =
+                          score >= KKM ? "✅ Lulus" : "❌ Belum Lulus";
 
-                      return (
-                        <Tooltip
-                          key={mi}
-                          title={
-                            <>
-                              <p className="font-semibold">
-                                {m.description || "Pelajari materi ini"}
-                              </p>
-                              <p className="text-xs">Percobaan: {attempts}x</p>
-                              <p className="text-xs">Status: {status}</p>
-                              <p className="text-xs">Nilai: {score}</p>
-                            </>
-                          }
-                          color="#5E331E"
-                        >
-                          <div
-                            className={`flex flex-col gap-2 p-3 rounded-xl shadow-md transition-all bg-[#EFEAD8]
-            ${
-              isUnlocked
-                ? "hover:shadow-xl hover:-translate-y-1 cursor-pointer"
-                : "opacity-60 cursor-not-allowed"
-            }`}
-                            onClick={() =>
-                              isUnlocked &&
-                              onNavigate({ title: m.title, id: Number(m.id) })
+                        return (
+                          <Tooltip
+                            key={mi}
+                            title={
+                              <>
+                                <p className="font-semibold">
+                                  {m.description || "Pelajari materi ini"}
+                                </p>
+                                <p className="text-xs">
+                                  Percobaan: {attempts}x
+                                </p>
+                                <p className="text-xs">Status: {status}</p>
+                                <p className="text-xs">Nilai: {score}</p>
+                              </>
                             }
+                            color="#5E331E"
                           >
-                            <div className="flex items-center gap-3">
-                              <Image
-                                src={isUnlocked ? m.thumbnail : lockIcon}
-                                alt="materi"
-                                width={40}
-                                height={40}
-                                className="object-contain"
-                              />
-                              <div className="flex-1 flex flex-col">
-                                <div className="flex justify-between items-center">
-                                  <span className="font-medium text-[#5E331E]">
-                                    {m.title}
-                                  </span>
-                                  {isUnlocked && (
-                                    <span
-                                      className={`ml-2 px-2 py-0.5 text-xs rounded-full font-semibold bg-[#EFEAD8]`}
-                                    >
-                                      {score >= KKM ? "🏆 Mastered" : "🆕 New"}
+                            <div
+                              className={`flex flex-col gap-2 p-3 rounded-xl shadow-md transition-all bg-[#EFEAD8]
+                ${
+                  isUnlocked
+                    ? "hover:shadow-xl hover:-translate-y-1 cursor-pointer"
+                    : "opacity-60 cursor-not-allowed"
+                }`}
+                              onClick={() =>
+                                isUnlocked &&
+                                onNavigate({ title: m.title, id: Number(m.id) })
+                              }
+                            >
+                              <div className="flex items-center gap-3">
+                                <Image
+                                  src={isUnlocked ? m.thumbnail : lockIcon}
+                                  alt="materi"
+                                  width={40}
+                                  height={40}
+                                  className="object-contain"
+                                />
+                                <div className="flex-1 flex flex-col">
+                                  <div className="flex justify-between items-center">
+                                    <span className="font-medium text-[#5E331E]">
+                                      {m.title}
                                     </span>
+                                    {isUnlocked && (
+                                      <span
+                                        className={`ml-2 px-2 py-0.5 text-xs rounded-full font-semibold bg-[#EFEAD8]`}
+                                      >
+                                        {score >= KKM
+                                          ? "🏆 Mastered"
+                                          : "🆕 New"}
+                                      </span>
+                                    )}
+                                  </div>
+                                  {isUnlocked && (
+                                    <>
+                                      <div className="h-2 bg-white rounded-full overflow-hidden mt-1">
+                                        <div
+                                          className="h-2 bg-green-500 rounded-full transition-all"
+                                          style={{ width: `${score}%` }}
+                                        />
+                                      </div>
+                                      <div className="flex justify-between text-xs mt-1 text-gray-700">
+                                        <span>Percobaan: {attempts}x</span>
+                                        <span>Status: {status}</span>
+                                      </div>
+                                    </>
                                   )}
                                 </div>
-                                {isUnlocked && (
-                                  <>
-                                    <div className="h-2 bg-white rounded-full overflow-hidden mt-1">
-                                      <div
-                                        className="h-2 bg-green-500 rounded-full transition-all"
-                                        style={{ width: `${score}%` }}
-                                      />
-                                    </div>
-                                    <div className="flex justify-between text-xs mt-1 text-gray-700">
-                                      <span>Percobaan: {attempts}x</span>
-                                      <span>Status: {status}</span>
-                                    </div>
-                                  </>
-                                )}
                               </div>
                             </div>
-                          </div>
-                        </Tooltip>
-                      );
-                    })}
+                          </Tooltip>
+                        );
+                      })
+                    )}
                   </div>
                 )}
               </div>

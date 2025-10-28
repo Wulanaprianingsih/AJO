@@ -21,8 +21,19 @@ export default function MaterialListContainer() {
   const materials = useMaterialState((state) => state.materials);
   const currentUser = useUserStore((state) => state.userProfile);
 
+  const [userData] = useState<{ scores: Record<string, number> } | undefined>(
+    dummyUserData
+  );
+  const [openLevel, setOpenLevel] = useState<number | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+
   useEffect(() => {
-    fetchMaterials();
+    const fetchData = async () => {
+      setIsLoading(true);
+      await fetchMaterials();
+      setIsLoading(false);
+    };
+    fetchData();
   }, []);
 
   const formatted = materials.map((x) => ({
@@ -57,11 +68,6 @@ export default function MaterialListContainer() {
     },
   ];
 
-  const [userData] = useState<{ scores: Record<string, number> } | undefined>(
-    dummyUserData
-  );
-  const [openLevel, setOpenLevel] = useState<number | null>(null);
-
   const handleNavigate = async (materi: { title: string; id: number }) => {
     router.push(`/belajar/${materi.id}`);
     if (currentUser?.email) {
@@ -76,6 +82,7 @@ export default function MaterialListContainer() {
       openLevel={openLevel}
       setOpenLevel={setOpenLevel}
       levels={LevelList}
+      isLoading={isLoading}
     />
   );
 }
