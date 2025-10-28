@@ -1,14 +1,11 @@
 "use client";
 
 import ConfirmEmail from "modules/auth/components/ConfirmEmail";
+import { useSearchParams } from "next/navigation";
 
-interface PageProps {
-  searchParams?: { [key: string]: string | string[] | undefined };
-}
-
-export default function ConfirmEmailPage({ searchParams }: PageProps) {
-  const emailParam = searchParams?.email;
-  const email = Array.isArray(emailParam) ? emailParam[0] : emailParam || "";
+export default function Page() {
+  const searchParams = useSearchParams();
+  const email = searchParams.get("email") || "";
 
   return <ConfirmEmail email={email} />;
 }
