@@ -1,15 +1,15 @@
+"use client";
+
 import ConfirmEmail from "modules/auth/components/ConfirmEmail";
 
 interface PageProps {
   searchParams: { email?: string | string[] };
 }
 
-export default async function ConfirmEmailPage({ searchParams }: PageProps) {
-  const params = await searchParams;
-
-  const email = Array.isArray(params.email)
-    ? params.email[0]
-    : params.email || "";
+export default function ConfirmEmailPage({ searchParams }: PageProps) {
+  const email = Array.isArray(searchParams.email)
+    ? searchParams.email[0]
+    : searchParams.email || "";
 
   return <ConfirmEmail email={email} />;
 }
