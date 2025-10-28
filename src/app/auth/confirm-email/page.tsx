@@ -3,13 +3,12 @@
 import ConfirmEmail from "modules/auth/components/ConfirmEmail";
 
 interface PageProps {
-  searchParams: { email?: string | string[] };
+  searchParams?: { [key: string]: string | string[] | undefined };
 }
 
 export default function ConfirmEmailPage({ searchParams }: PageProps) {
-  const email = Array.isArray(searchParams.email)
-    ? searchParams.email[0]
-    : searchParams.email || "";
+  const emailParam = searchParams?.email;
+  const email = Array.isArray(emailParam) ? emailParam[0] : emailParam || "";
 
   return <ConfirmEmail email={email} />;
 }
