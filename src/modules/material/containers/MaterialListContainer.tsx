@@ -20,6 +20,7 @@ export default function MaterialListContainer() {
   const router = useRouter();
   const materials = useMaterialState((state) => state.materials);
   const currentUser = useUserStore((state) => state.userProfile);
+  const isNeedToFetch = useMaterialState((state) => state.isNeedToFetch);
 
   const [userData] = useState<{ scores: Record<string, number> } | undefined>(
     dummyUserData
@@ -33,8 +34,12 @@ export default function MaterialListContainer() {
       await fetchMaterials();
       setIsLoading(false);
     };
-    fetchData();
-  }, []);
+    if (isNeedToFetch) {
+      fetchData();
+    } else {
+      setIsLoading(false);
+    }
+  }, [isNeedToFetch]);
 
   const formatted = materials.map((x) => ({
     title: x.title,

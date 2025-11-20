@@ -12,19 +12,21 @@ import { fetchUserData, updateUserPoint } from "services/userService";
 import { useUserStore } from "store/userDataStore";
 import { useMaterialState } from "store/materialStore";
 import { fetchMaterials } from "services/materialService";
+import { IMaterialData } from "types/material";
 
 interface IBadge {
-  name: string
+  name: string;
 }
 export default function ExercisesContainer() {
   const KKM = 70;
   const params = useParams();
-  const route = useRouter()
+  const route = useRouter();
   const materiId = params.id;
   const userProfile = useUserStore((state) => state.userProfile);
   const material = useMaterialState((s) => s.materials);
-  const [openBadgeModal, setOpenBagdeModal] = useState(false)
-  const [badgeName, setBadgeName] = useState('')
+  const setNeedToFetch = useMaterialState((s) => s.setNeedToFetch);
+  const [openBadgeModal, setOpenBagdeModal] = useState(false);
+  const [badgeName, setBadgeName] = useState("");
 
   const detailMaterial = material.find(
     (x) => x.id.toString() == materiId?.toString()
@@ -46,14 +48,22 @@ export default function ExercisesContainer() {
     }
   }, [detailMaterial, materiId]);
 
-  const checkLevelUp = async () => {
-    const getAllMateryByLevel = material.filter(
-      (m) => m.level === detailMaterial?.level
+  const checkLevelUp = () => {
+    const currentLevel = detailMaterial?.level;
+    const list = material?.filter((m) => m.level === currentLevel) ?? [];
+
+    if (list.length === 0) return false;
+    const filteredHistory: IMaterialData[] = list.filter(
+      (m) => m.id !== Number(materiId)
     );
-    if (getAllMateryByLevel.length === 1) return true;
-    return getAllMateryByLevel.every(
-      (x) => x.excercise_history.length > 0 && x.excercise_history?.[0]?.point >= 70
-    );
+    console.log("filteredHistory", filteredHistory);
+    return filteredHistory.every((m) => {
+      const history = m.excercise_history ?? [];
+      if (history.length === 0) return false;
+
+      const lastPoint = history[0].point;
+      return lastPoint >= KKM;
+    });
   };
 
   const insertUserAnswer = async (answer: Record<number, string>) => {
@@ -64,7 +74,6 @@ export default function ExercisesContainer() {
     };
 
     await insertUserAnswers(payload);
-    console.log("payload", payload);
   };
 
   const calculatePoint = async (point: number, attemptCount: number) => {
@@ -79,7 +88,8 @@ export default function ExercisesContainer() {
     point: number,
     answer: Record<number, string>
   ) => {
-    const badges:IBadge[] = [];
+    setNeedToFetch(true);
+    const badges: IBadge[] = [];
     const userAttemptCount = await getUserExampHistory(Number(materiId));
     const calculatedPoint = await calculatePoint(point, userAttemptCount);
     const _payload = {
@@ -91,17 +101,15 @@ export default function ExercisesContainer() {
     try {
       await insertExcercisesHistory(_payload);
 
-      if (userAttemptCount === 2) {
-        if (calculatedPoint < KKM) {
-          setBadgeName('sad')
-        } else {
-          badges.push({ name: "Pejuang Remedial", });
-          setBadgeName("Pejuang Remedial")
-        }
+      if (userAttemptCount > 0 && calculatedPoint >= KKM) {
+        badges.push({ name: "Pejuang Remedial" });
+        setBadgeName("Pejuang Remedial");
+      } else if (userAttemptCount === 2 && calculatedPoint < KKM) {
+        setBadgeName("sad");
       } else {
         if (calculatedPoint === 100) {
           badges.push({ name: "Ahli Materi " + detailMaterial?.title });
-          setBadgeName("Ahli Materi " + detailMaterial?.title)
+          setBadgeName("Ahli Materi " + detailMaterial?.title);
         }
       }
 
@@ -117,12 +125,14 @@ export default function ExercisesContainer() {
           level: isLevelUp ? newLevel : 0,
         };
         await updateUserPoint(payloadUpdateUser);
+        console.log("isLevelUp", isLevelUp);
 
         if (isLevelUp) {
-          badges.push({ name:`Rajin Level ${detailMaterial?.level}` });
-          setBadgeName(`Rajin Level ${detailMaterial?.level}`)
+          badges.push({ name: `Rajin Level ${detailMaterial?.level}` });
+          setBadgeName(`Rajin Level ${detailMaterial?.level}`);
         }
         await insertUserAnswer(answer);
+        console.log("payload insertUserAnswer", answer);
       }
 
       const badgesPayload = badges.map((x) => ({
@@ -130,6 +140,7 @@ export default function ExercisesContainer() {
         user_id: user_id,
       }));
       await insertUserBadge(badgesPayload);
+      console.log("payload insertUserBadge", badgesPayload);
 
       await fetchUserData(user_id);
     } catch (e) {
@@ -138,9 +149,9 @@ export default function ExercisesContainer() {
   };
 
   const handleCloseModal = () => {
-    setOpenBagdeModal(false)
-    route.push('/belajar')
-  }
+    setOpenBagdeModal(false);
+    route.push("/belajar");
+  };
 
   useEffect(() => {
     if (badgeName.length > 0) {
@@ -148,7 +159,6 @@ export default function ExercisesContainer() {
     }
   }, [badgeName]);
 
-  
   return (
     <ExercisesComponent
       onSubmit={handleSubmit}
