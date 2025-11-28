@@ -13,7 +13,7 @@ export const fetchMaterials = async (id?: number) => {
   const fetchAll = async () => {
     const { data: materials, error } = await supabase
       .from("materials")
-      .select("*")
+      .select("id, content_text, created_at, description, level, media_type, media_url, sample_quiz, sequence, thumbnail, title, updated_at")
       .order("sequence");
 
     if (error) {
