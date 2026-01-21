@@ -29,7 +29,7 @@ export default function ExercisesContainer() {
   const [badgeName, setBadgeName] = useState("");
 
   const detailMaterial = material.find(
-    (x) => x.id.toString() == materiId?.toString()
+    (x) => x.id.toString() == materiId?.toString(),
   );
 
   const excercises = detailMaterial?.excercises.map((ex) => ({
@@ -54,9 +54,8 @@ export default function ExercisesContainer() {
 
     if (list.length === 0) return false;
     const filteredHistory: IMaterialData[] = list.filter(
-      (m) => m.id !== Number(materiId)
+      (m) => m.id !== Number(materiId),
     );
-    console.log("filteredHistory", filteredHistory);
     return filteredHistory.every((m) => {
       const history = m.excercise_history ?? [];
       if (history.length === 0) return false;
@@ -86,7 +85,7 @@ export default function ExercisesContainer() {
 
   const handleSubmit = async (
     point: number,
-    answer: Record<number, string>
+    answer: Record<number, string>,
   ) => {
     setNeedToFetch(true);
     const badges: IBadge[] = [];
@@ -125,14 +124,11 @@ export default function ExercisesContainer() {
           level: isLevelUp ? newLevel : 0,
         };
         await updateUserPoint(payloadUpdateUser);
-        console.log("isLevelUp", isLevelUp);
-
         if (isLevelUp) {
           badges.push({ name: `Rajin Level ${detailMaterial?.level}` });
           setBadgeName(`Rajin Level ${detailMaterial?.level}`);
         }
         await insertUserAnswer(answer);
-        console.log("payload insertUserAnswer", answer);
       }
 
       const badgesPayload = badges.map((x) => ({

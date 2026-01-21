@@ -13,20 +13,18 @@ export const fetchMaterials = async (id?: number) => {
   const fetchAll = async () => {
     const { data: materials, error } = await supabase
       .from("materials")
-      .select("id, content_text, created_at, description, level, media_type, media_url, sample_quiz, sequence, thumbnail, title, updated_at")
+      .select(
+        "id, content_text, created_at, description, level, media_type, media_url, sample_quiz, sequence, thumbnail, title, updated_at",
+      )
       .order("sequence");
 
     if (error) {
       console.error("error fetch materials:", error);
       throw error;
     }
-
-    console.log("materials", materials);
-
     const materialData = [];
 
     for (const m of materials) {
-      console.log("material excercises", m.id);
       const excercises = await fetchAllExcercise(m.id);
       const userHistory = await fetchAllUserHistory(m.id);
       const userAnswers = await fetchAllUserAnswers(m.id);
@@ -108,7 +106,7 @@ export const fetchMaterials = async (id?: number) => {
   const modifiedMaterials = materials.map((m, i) => {
     const excercise_history = m.user_excercise_history?.sort(
       (a: IExcerciseHistory, b: IExcerciseHistory) =>
-        new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+        new Date(b.created_at).getTime() - new Date(a.created_at).getTime(),
     );
 
     const options = m.sample_quiz.options.map((x: IOptionsQuiz) => x.text);
@@ -143,7 +141,7 @@ export const fetchMaterials = async (id?: number) => {
 export const uploadImage = async (
   path: string,
   filename: string,
-  file: File
+  file: File,
 ) => {
   try {
     const { error: uploadError } = await supabase.storage

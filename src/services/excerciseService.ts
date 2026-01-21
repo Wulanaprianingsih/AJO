@@ -37,7 +37,7 @@ export const insertExcercises = async (payload: IExcercisePayload[]) => {
 
 export const updateExcercises = async (
   id: number | string,
-  payload: IExcercisePayload[]
+  payload: IExcercisePayload[],
 ) => {
   try {
     const { data, error } = await supabase
@@ -61,7 +61,6 @@ export const deleteExcercise = async (id: number) => {
     const { error } = await supabase.from("excercises").delete().eq("id", id);
     if (error) console.log("error", error);
     else {
-      console.log("success delete");
       const filteredExcercise = excercise.filter((ex) => ex.id !== id);
       setExcercise(filteredExcercise);
       fetchExcercises();

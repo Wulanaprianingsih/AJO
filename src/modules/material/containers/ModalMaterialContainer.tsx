@@ -13,7 +13,7 @@ export default function ModalMaterialContainer(props: IProps) {
   const { openModal, setOpenModal } = props;
   const addMaterial = useMaterialState((state) => state.addMaterial);
   const defaultMaterialValue = useMaterialState(
-    (state) => state.defaultMaterialValue
+    (state) => state.defaultMaterialValue,
   );
   const setDefaultValue = useMaterialState((state) => state.setDefaultValue);
 
@@ -36,7 +36,6 @@ export default function ModalMaterialContainer(props: IProps) {
         .select();
       if (error) console.log("error", error);
       else {
-        console.log(data);
         if (data) {
           addMaterial(data[0]);
         }
@@ -72,7 +71,7 @@ export default function ModalMaterialContainer(props: IProps) {
     ];
 
     const filteredPayload = Object.fromEntries(
-      Object.entries(payload).filter(([key]) => !excludeKeys.includes(key))
+      Object.entries(payload).filter(([key]) => !excludeKeys.includes(key)),
     );
 
     try {
@@ -82,7 +81,6 @@ export default function ModalMaterialContainer(props: IProps) {
         .eq("id", defaultMaterialValue?.id);
       if (error) console.log("error", error);
       else {
-        console.log(data);
         setDefaultValue(null);
       }
     } catch (e) {
